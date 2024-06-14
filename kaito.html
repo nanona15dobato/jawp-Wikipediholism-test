@@ -24,13 +24,16 @@ body {
 }
 
 .kek{
+  margin: 10px auto;
   ustify-content: center;
 }
 </style>
 </head>
 <body>
-<br >
+<h1>あなたはウィキペディア中毒でしょうかテスト回答確認ページ</h1>
+<br />
 <div class="kek">
+<div id="usern"></div>
 <div id="score" style="font-size: 150%;"></div>
 <div id="tedo" style="font-size: 150%; font-weight:bold;"></div>
 <div id="come"></div>
@@ -221,6 +224,7 @@ function generateTable(questions, kaito, urlParams) {
     const scoreElement = document.getElementById('score');
     const tedoElement = document.getElementById('tedo');
     const comeElement = document.getElementById('come');
+    const usernElement = document.getElementById('usern');
     let tableHTML = '<table class="table"><thead><tr><th></th><th></th><th>質問文</th><th>回答</th><th>点数</th></tr></thead><tbody>';
     let kIndex = 0;
     var tens = 0;
@@ -251,6 +255,7 @@ function generateTable(questions, kaito, urlParams) {
 
     tableHTML += '</tbody></table>';
     quizTable.innerHTML = tableHTML;
+    usernElement.innerHTML = urlParams.get('USER') + "さんの結果は";
     
     var totalScore = tens;
     scoreElement.innerHTML = `合計点: ${totalScore}<br>`;
