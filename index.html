@@ -14,6 +14,9 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            position: relative;
+            padding-bottom: 120px;
+            box-sizing: border-box;
         }
 
         .container {
@@ -85,11 +88,55 @@
             border: 2px solid #aaa;
             border-radius: 5px;
         }
+
+        .numberInputContainer {
+            display: none;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .numberInput {
+            padding: 10px;
+            font-size: 1em;
+            border: 2px solid #aaa;
+            border-radius: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #f3f3f3;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 20px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #4caf50;
+            width: 0%;
+            border-radius: 5px;
+            text-align: center;
+            color: white;
+            line-height: 20px;
+        }
+
+        .currentScore {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        footer{
+            position: absolute;
+            bottom: 0;
+            font-size: 0.5em;
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
+        <div id="currentScore" class="currentScore">現在の点数: 0</div>
         <div id="quiz">
             <div class="st1e" id="st1e"></div>
             <div class="st2e" id="st2e"></div>
@@ -111,8 +158,14 @@
             <div id="nowjst"></div>
             <button id="restartButton">最初からやり直す</button>
         </div>
+        <br />
+        <div class="progress-bar">
+            <div class="progress-bar-fill" id="progressBarFill">0%</div>
+        </div>
     </div>
-
+    <footer>
+        <p class="CC">このページはウィキペディア日本語版<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88" target="_blank">Wikipedia:あなたはウィキペディア中毒でしょうかテスト</a>の<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%AE%E7%B7%A8%E9%9B%86" target="_blank">2024年4月4日 (木) 10:50(UTC)の版</a>をもとに作成しています。<wbr><p xmlns:cc="http://creativecommons.org/ns#" >This work by <span property="cc:attributionName">なノな15どバと</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p></p>
+    </footer>
     <script>
         const questions = [
             { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1},
@@ -296,6 +349,8 @@
         const comeElement = document.getElementById('come');
         const restartButton = document.getElementById('restartButton');
         const suji = document.getElementById('suji');
+        const progressBarFill = document.getElementById('progressBarFill');
+        const currentScoreElement = document.getElementById('currentScore');
         suji.value = '0';
         var kazk1=0;
         var kazk2=0;
@@ -323,12 +378,25 @@
                 noButton.style.display = 'none';
                 numberInputContainer.style.display = 'none';
                 startButton.style.display = 'inline-block';
+                currentScoreElement.style.display = 'inline-block';
             } else {
                 yesButton.style.display = 'inline-block';
                 noButton.style.display = 'inline-block';
                 numberInputContainer.style.display = 'none';
                 startButton.style.display = 'none';
             }
+            updateProgressBar(index);
+            updateCurrentScore();
+        }
+
+        function updateProgressBar(index) {
+            const percentage = Math.round((index / questions.length) * 100);
+            progressBarFill.style.width = `${percentage}%`;
+            progressBarFill.textContent = `${percentage}%`;
+        }
+
+        function updateCurrentScore() {
+            currentScoreElement.innerText = `現在の点数: ${totalScore}`;
         }
 
         function handleAnswer(answer) {
@@ -357,7 +425,10 @@
 
         function showResult() {
             document.getElementById('quiz').style.display = 'none';
+            currentScoreElement.style.display = 'none';
             resultElement.style.display = 'block';
+            progressBarFill.style.width = `100%`;
+            progressBarFill.textContent = `100%`;
 
             scoreElement.innerHTML = `合計点: ${totalScore}<br>`;
 
