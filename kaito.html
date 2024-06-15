@@ -102,7 +102,9 @@ a:hover {
 console.log("ver 0.5.2");
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const kaito1 = parseInt(urlParams.get('kaito'), 36).toString(2) || '未回答またはエラー';
+    var ku1 = urlParams.get('kaito').split("Z");
+    var ku2 = ku1.map(ku1 => parseInt(ku1, 32).toString(2));
+    const kaito1 = ku2.join("") || '未回答またはエラー';
     
     var kaito = kaito1.substring(1); 
     var kaito2 = kaito1.substring(0,1);  
