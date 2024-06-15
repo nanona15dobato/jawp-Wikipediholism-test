@@ -167,7 +167,7 @@
         <p class="CC">このページはウィキペディア日本語版<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88" target="_blank">Wikipedia:あなたはウィキペディア中毒でしょうかテスト</a>の<a href="https://ja.wikipedia.org/w/index.php?title=Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88&oldid=99893843" target="_blank">2024年4月4日 (木) 10:50(UTC)の版</a>をもとに作成しています。<wbr><p xmlns:cc="http://creativecommons.org/ns#" >This work by <span property="cc:attributionName">なノな15どバと</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p></p>
     </footer>
     <script>
-        console.log("ver 0.5.3");
+        console.log("ver 0.5.4");
         const questions = [
             { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1},
             { st1: '使用頻度', st2: '使用…', text: '1-1.先週は週3~4日程度で、ウィキペディアを使った。（3点）', score: 3, skip: 0 },
@@ -533,7 +533,7 @@
             } else {
                 tedoElement.innerHTML = 'エラーまたは診断対象外です。';
             }
-            var kekkaurl = parseInt(responses.join('')).toString(36);
+            var kekkaurl = parseInt(responses.join(''), 2).toString(36);
             var date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
             var jstNow = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' +('0' + date.getDate()).slice(-2) + ' ' +  ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2) + '(<!--たぶん-->JST)';
             console.log(totalScore);
