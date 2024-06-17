@@ -2,9 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wikipedia中毒回答確認</title>
 <style>
-body {
+main {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
     color: #333;
@@ -84,7 +85,10 @@ a:hover {
 
 </style>
 </head>
-<body>
+<body onLoad="inmenu();">
+<script type="text/javascript" src="../menu.js"></script>
+<div id="menu"></div>
+<main>
 <h1>あなたはウィキペディア中毒でしょうかテスト回答確認ページ</h1>
 <br />
 <div class="kek">
@@ -425,5 +429,6 @@ function generateTable(questions, kaito, urlParams) {
 }
 
 </script>
+</main>
 </body>
 </html>
