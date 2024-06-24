@@ -148,6 +148,7 @@
                 <button id="yesButton">はい (Y)</button>
                 <button id="noButton">いいえ (N)</button>
                 <button id="startButton">開始 (Y)</button>
+                <button id="backButton">戻る (B)</button>
             </div>
             <div class="numberInputContainer" id="numberInputContainer">
                 <input type="number" id="suji" class="suji">
@@ -617,6 +618,8 @@
                 noButton.click();
             } else if (event.key === 't' || event.key === 'T') {
                 nextButton.click();
+            } else if (event.key === 'b' || event.key === 'B') {
+                backButton.click();
             }
         });
 
@@ -626,6 +629,16 @@
             responses = [1];
             resultElement.style.display = 'none';
             document.getElementById('quiz').style.display = 'block';
+            showQuestion(currentQuestionIndex);
+        });
+
+        backButton.addEventListener('click', () => {
+            var lastanswer = responses.slice(-1)[0];
+            responses.pop();
+            responses = [1];
+            currentQuestionIndex--;
+            var question = questions[currentQuestionIndex];
+            totalScore -= question.score;
             showQuestion(currentQuestionIndex);
         });
 
