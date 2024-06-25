@@ -144,6 +144,7 @@
             <div id="quiz">
                 <div class="st1e" id="st1e"></div>
                 <div class="st2e" id="st2e"></div>
+                <div id="ms1"></div>
                 <div class="question" id="question"></div>
                 <div class="buttons">
                     <button id="yesButton">はい (Y)</button>
@@ -188,7 +189,7 @@
         </footer>
         <script>
             console.log("ver 0.5.12");
-            alert("ver 0.5.12");
+            document.getElementById("ms1").innerHTML += "<br>ver 0.5.12";
             const questions = [
                 { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1 },
                 { st1: '使用頻度', st2: '使用…', text: '1-1.先週は週3~4日程度で、ウィキペディアを使った。（3点）', score: 3, skip: 0 },
@@ -684,12 +685,12 @@
                             totalScore -= (kazk6 * 15);
                             var kazk6 = 0;
                         }
-                        alert(totalScore + "#" + (kazk1 * 10))
+                        document.getElementById("ms1").innerHTML += "<br>" + totalScore + "#" + (kazk1 * 10);
                     } else {
 
                         if (lastanswer > 0) {
                             totalScore -= question.score;
-                            alert(totalScore + "%" + question.score)
+                            document.getElementById("ms1").innerHTML += "<br>" + totalScore + "%" + question.score
                         }
                     }
 
