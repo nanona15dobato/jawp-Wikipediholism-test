@@ -374,12 +374,12 @@
             const currentScoreElement = document.getElementById('currentScore');
             const urlmypageElement = document.getElementById('urlmypage');
             suji.value = '0';
-            var kazk1 = 0;
-            var kazk2 = 0;
-            var kazk3 = 0;
-            var kazk4 = 0;
-            var kazk5 = 0;
-            var kazk6 = 0;
+            let kazk1 = 0;
+            let kazk2 = 0;
+            let kazk3 = 0;
+            let kazk4 = 0;
+            let kazk5 = 0;
+            let kazk6 = 0;
 
             function showQuestion(index) {
                 const question = questions[index];
@@ -592,28 +592,28 @@
                     var numberAnswer = parseInt(suji.value, 10);
 
                     if (question.kaz == 1) {
-                        var kazk1 = numberAnswer;
+                        kazk1 += numberAnswer;
                         totalScore += numberAnswer * 10;
                         console.log(kazk1);
                     }
                     if (question.kaz == 2) {
-                        var kazk2 = numberAnswer;
+                        kazk2 += numberAnswer;
                         totalScore += numberAnswer * 20;
                     }
                     if (question.kaz == 3) {
-                        var kazk3 = numberAnswer;
+                        kazk3 += numberAnswer;
                         totalScore += numberAnswer * 10;
                     }
                     if (question.kaz == 4) {
-                        var kazk4 = numberAnswer;
+                        kazk4 += numberAnswer;
                         totalScore += numberAnswer * 5;
                     }
                     if (question.kaz == 5) {
-                        var kazk5 = numberAnswer;
+                        kazk5 += numberAnswer;
                         totalScore += numberAnswer * 15;
                     }
                     if (question.kaz == 6) {
-                        var kazk6 = numberAnswer;
+                        kazk6 += numberAnswer;
                         totalScore += numberAnswer * 15;
                     }
                     console.log(numberAnswer);
