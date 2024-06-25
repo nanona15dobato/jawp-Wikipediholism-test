@@ -187,7 +187,7 @@
             </p>
         </footer>
         <script>
-            console.log("ver 0.5.7");
+            console.log("ver 0.5.8");
             const questions = [
                 { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1 },
                 { st1: '使用頻度', st2: '使用…', text: '1-1.先週は週3~4日程度で、ウィキペディアを使った。（3点）', score: 3, skip: 0 },
@@ -593,30 +593,30 @@
 
 
                     if (question.kaz == 1) {
-                        totalScore += numberAnswer * 10;
                         var kazk1 = numberAnswer;
+                        totalScore += numberAnswer * 10;
                     }
                     if (question.kaz == 2) {
-                        totalScore += numberAnswer * 20;
                         var kazk2 = numberAnswer;
+                        totalScore += numberAnswer * 20;
                     }
                     if (question.kaz == 3) {
-                        totalScore += numberAnswer * 10;
                         var kazk3 = numberAnswer;
+                        totalScore += numberAnswer * 10;
                     }
                     if (question.kaz == 4) {
-                        totalScore += numberAnswer * 5;
                         var kazk4 = numberAnswer;
+                        totalScore += numberAnswer * 5;
                     }
+                        var kazk5 = numberAnswer;
                     if (question.kaz == 5) {
                         totalScore += numberAnswer * 15;
-                        var kazk5 = numberAnswer;
                     }
                     if (question.kaz == 6) {
-                        totalScore += numberAnswer * 15;
                         var kazk6 = numberAnswer;
+                        totalScore += numberAnswer * 15;
                     }
-
+                    console.log(numberAnswer);
                     suji.value = '0';
                     currentQuestionIndex++;
                     if (currentQuestionIndex < questions.length) {
