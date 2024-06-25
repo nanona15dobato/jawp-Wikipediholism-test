@@ -144,18 +144,17 @@
             <div id="quiz">
                 <div class="st1e" id="st1e"></div>
                 <div class="st2e" id="st2e"></div>
-                <div id="ms1"></div>
                 <div class="question" id="question"></div>
                 <div class="buttons">
                     <button id="yesButton">はい (Y)</button>
                     <button id="noButton">いいえ (N)</button>
                     <button id="startButton">開始 (Y)</button>
-                    <button id="backButton">戻る (B)</button>
                 </div>
                 <div class="numberInputContainer" id="numberInputContainer">
                     <input type="number" id="suji" class="suji">
                     <button id="nextButton">次へ(T)</button>
                 </div>
+                    <button id="backButton">戻る (B)</button>
             </div>
             <div id="result" class="result" style="display:none;">
                 <div id="score" style="font-size: 150%"></div>
@@ -188,8 +187,7 @@
             </p>
         </footer>
         <script>
-            console.log("ver 0.5.15");
-            document.getElementById("ms1").innerHTML += "<br>ver 0.5.15";
+            console.log("ver 0.5.16");
             const questions = [
                 { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1 },
                 { st1: '使用頻度', st2: '使用…', text: '1-1.先週は週3~4日程度で、ウィキペディアを使った。（3点）', score: 3, skip: 0 },
@@ -663,35 +661,32 @@
 
                         if (question.kaz == 1) {
                             totalScore -= (kazk1 * 10);
-                            document.getElementById("ms1").innerHTML += "<br>" + kazk1;
-                            var kazk1 = 0;
+                            kazk1 = 0;
                         }
                         if (question.kaz == 2) {
                             totalScore -= (kazk2 * 20);
-                            var kazk2 = 0;
+                            kazk2 = 0;
                         }
                         if (question.kaz == 3) {
                             totalScore -= (kazk3 * 10);
-                            var kazk3 = 0;
+                            kazk3 = 0;
                         }
                         if (question.kaz == 4) {
                             totalScore -= (kazk4 * 5);
-                            var kazk4 = 0;
+                            kazk4 = 0;
                         }
                         if (question.kaz == 5) {
                             totalScore -= (kazk5 * 15);
-                            var kazk5 = 0;
+                            kazk5 = 0;
                         }
                         if (question.kaz == 6) {
                             totalScore -= (kazk6 * 15);
-                            var kazk6 = 0;
+                            kazk6 = 0;
                         }
-                        document.getElementById("ms1").innerHTML += "<br>" + totalScore + "#" + (kazk1 * 10);
                     } else {
 
                         if (lastanswer > 0) {
                             totalScore -= question.score;
-                            document.getElementById("ms1").innerHTML += "<br>" + totalScore + "%" + question.score
                         }
                     }
 
