@@ -89,7 +89,7 @@
         }
 
         input[type="text"] {
-            width: 300px;
+            flex: 1;
             padding: 8px;
             margin-right: 10px;
             border: 1px solid #ccc;
@@ -149,7 +149,7 @@
         </footer>
         <script>
 
-            console.log("ver 0.5.7");
+            console.log("ver 0.5.8");
             document.addEventListener('DOMContentLoaded', () => {
                 const urlParams = new URLSearchParams(window.location.search);
                 var ku = urlParams.get('kaito')
@@ -498,7 +498,7 @@
                 const inputBoxValue = document.getElementById('inputBox').value;
                 const urlParams = new URLSearchParams(window.location.search);
                 const userParam = urlParams.get('USER');
-                let newUrl = `https://exam.com/?kaito=${encodeURIComponent(inputBoxValue)}`;
+                let newUrl = `https://nanona15dobato.github.io/jawp-Wikipediholism-test/kaito.html?kaito=${encodeURIComponent(inputBoxValue)}`;
                 if (userParam) {
                     newUrl += `&USER=${encodeURIComponent(userParam)}`;
                 }
