@@ -383,7 +383,11 @@
 
                 tableHTML += '</tbody></table>';
                 quizTable.innerHTML = tableHTML;
-                usernElement.innerHTML = urlParams.get('USER') + "さんの結果は";
+                if(urlParams.get('USER')){
+                    usernElement.innerHTML = urlParams.get('USER') + "さんの結果は";
+                }else{
+                    usernElement.innerHTML = "結果は";
+                }
 
                 var totalScore = tens;
                 scoreElement.innerHTML = `合計点: ${totalScore}<br>`;
