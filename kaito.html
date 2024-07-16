@@ -152,7 +152,7 @@
         </footer>
         <script>
 
-            console.log("ver 0.5.8");
+            console.log("ver 0.5.9");
             document.addEventListener('DOMContentLoaded', () => {
                 const urlParams = new URLSearchParams(window.location.search);
                 var ku = urlParams.get('kaito')
@@ -363,9 +363,13 @@
                     let answer = '';
                     var ts = 0;
                     if (question.kaz !== undefined) {
-                        answer = parseInt(ku0[question.kaz + ki2], 32).toString(10) || '未回答';
-                        var ts = answer * question.tk
-                        tens += ts
+                        if(ku0[question.kaz + ki2]){
+                            answer = parseInt(ku0[question.kaz + ki2], 32).toString(10);
+                            var ts = answer * question.tk
+                            tens += ts   
+                        }else{
+                            answer = '未回答';
+                        }
                     } else {
                         answer = kaito[kIndex] === '1' ? '◯' : '✕';
                         if (kaito[kIndex] === '1') {
