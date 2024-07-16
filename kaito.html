@@ -320,6 +320,12 @@
                 let tableHTML = '<table class="table"><thead><tr><th></th><th></th><th>質問文</th><th>回答</th><th>点数</th></tr></thead><tbody>';
                 let kIndex = 0;
                 var tens = 0;
+                if (ku0[0] == 1) {
+                    var ki1 = 1;
+                    var ki2 = 2;
+                } else {
+                    console.log("エラーn1");
+                }
                 questions.forEach((question, index) => {
                     let answer = '';
                     var ts = 0;
