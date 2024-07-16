@@ -21,7 +21,8 @@
             margin-bottom: 20px;
         }
 
-        .kek {
+        .kek,
+        .codein {
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -86,6 +87,27 @@
         a:hover {
             text-decoration: underline;
         }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -95,6 +117,10 @@
     <main>
         <h1>あなたはウィキペディア中毒でしょうかテスト回答確認ページ</h1>
         <br />
+        <div class="codein">
+            <input type="text" id="inputBox" placeholder="回答コードを入力">
+            <button id="hyojib">表示</button>
+        </div>
         <div class="kek">
             <div id="usern"></div>
             <div id="score" style="font-size: 150%;"></div>
@@ -126,7 +152,11 @@
             console.log("ver 0.5.7");
             document.addEventListener('DOMContentLoaded', () => {
                 const urlParams = new URLSearchParams(window.location.search);
-                var ku0 = urlParams.get('kaito').split("Y");
+                var ku = urlParams.get('kaito')
+                if (ku) {
+                    document.getElementById('inputBox').value = ku;
+                }
+                var ku0 = ku.split("Y");
                 console.log(ku0);
                 if (ku0[0] == 1) {
                     var ki1 = 1;
@@ -460,7 +490,16 @@
 
 
             }
-
+            document.getElementById('hyojib').onclick = function () {
+                const inputBoxValue = document.getElementById('inputBox').value;
+                const urlParams = new URLSearchParams(window.location.search);
+                const userParam = urlParams.get('USER');
+                let newUrl = `https://exam.com/?kaito=${encodeURIComponent(inputBoxValue)}`;
+                if (userParam) {
+                    newUrl += `&USER=${encodeURIComponent(userParam)}`;
+                }
+                window.location.href = newUrl;
+            };
         </script>
     </main>
 </body>
