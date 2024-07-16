@@ -1,434 +1,463 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wikipedia中毒回答確認</title>
-<style>
-main {
-    font-family: 'Arial', sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-}
-
-h1 {
-    text-align: center;
-    color: #2c3e50;
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
-.kek {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
-
-#usern {
-    font-size: 1.5em;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-#score, #tedo, #come {
-    text-align: center;
-    margin: 10px 0;
-}
-
-#tedo {
-    font-size: 1.8em;
-}
-
-#come {
-    font-size: 1.2em;
-    color: #555;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-table th {
-    background-color: #f2f2f2;
-    color: #333;
-    font-weight: bold;
-}
-
-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-a {
-    color: #3498db;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-</style>
-</head>
-<body onLoad="inmenu();">
-<script type="text/javascript" src="../menu.js"></script>
-<div id="menu"></div>
-<main>
-<h1>あなたはウィキペディア中毒でしょうかテスト回答確認ページ</h1>
-<br />
-<div class="kek">
-<div id="usern"></div>
-<div id="score" style="font-size: 150%;"></div>
-<div id="tedo" style="font-size: 150%; font-weight:bold;"></div>
-<div id="come"></div>
-</div>
-<div id="quizTable"></div>
-    
-<footer>
-        <p class="CC">このページはウィキペディア日本語版<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88" target="_blank">Wikipedia:あなたはウィキペディア中毒でしょうかテスト</a>の<a href="https://ja.wikipedia.org/w/index.php?title=Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88&oldid=99893843" target="_blank">2024年4月4日 (木) 10:50(UTC)の版</a>をもとに作成しています。<wbr><p xmlns:cc="http://creativecommons.org/ns#" >This work by <span property="cc:attributionName">なノな15どバと</span> is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p></p>
-</footer>
-<script>
-console.log("ver 0.5.3");
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    var ku1 = urlParams.get('kaito').split("Z");
-    var ku2 = ku1.map(ku1 => parseInt(ku1, 32).toString(2).substring(1));
-    const kaito1 = ku2.join("") || '未回答またはエラー';
-    
-    var kaito = kaito1.substring(1); 
-    var kaito2 = kaito1.substring(0,1);  
-    var tens = 0;    
-
-    var questions = [
-            { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1},
-            { st1: '使用頻度', st2: '使用…', text: '1-1.先週は週3~4日程度で、ウィキペディアを使った。（3点）', score: 3, skip: 0 },
-            { st1: '使用頻度', st2: '使用…', text: '1-2.先週は毎日、ウィキペディアを使った。（5点）', score: 5, skip: 2 },
-            { st1: '使用頻度', st2: '使用…', text: '1-3.先月は毎日、ウィキペディアを使った。（さらに15点）', score: 15, skip: 1 },
-            { st1: '使用頻度', st2: '使用…', text: '1-4.半年間毎日、ウィキペディアを使った。（さらに50点）', score: 50, skip: 0 },
-            { st1: '使用頻度', st2: '編集…', text: '2-1.先週、1日も休まず<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%AE%E7%B7%A8%E9%9B%86" target="_blank">編集</a>した。（10点）', score: 10, skip: 1 },
-            { st1: '使用頻度', st2: '編集…', text: '2-2.先月、1日も休まず編集した。（さらに20点）', score: 20, skip: 0 },
-            { st1: '使用頻度', st2: '平均編集回数…', text: '3-1.先週、1日あたり5回以上編集した。（5点）', score: 5, skip: 6 },
-            { st1: '使用頻度', st2: '平均編集回数…', text: '3-2.先週、1日あたり10回以上編集した。（さらに5点）', score: 5, skip: 5 },
-            { st1: '使用頻度', st2: '平均編集回数…', text: '3-3.先週、1日あたり20回以上編集した。（さらに10点）', score: 10, skip: 4 },
-            { st1: '使用頻度', st2: '平均編集回数…', text: '3-4.先週、1日あたり50回以上編集した。（さらに30点）', score: 30, skip: 3 },
-            { st1: '使用頻度', st2: '平均編集回数…', text: '3-5.先週、1日あたり100回以上編集した。（さらに50点）', score: 50, skip: 2 },
-            { st1: '使用頻度', st2: '平均編集回数…', text: '3-6.先週、1日あたり200回以上編集した。（さらに80点）', score: 80, skip: 1 },
-            { st1: '使用頻度', st2: '平均編集回数…', text: '3-7.先週、1日あたり300回以上編集した。（さらに100点）', score: 100, skip: 0 },
-            { st1: '使用頻度', st2: '最大編集回数…', text: '4-1.先週、1日で20回以上編集した日がある。（10点）', score: 10, skip: 4 },
-            { st1: '使用頻度', st2: '最大編集回数…', text: '4-2.先週、1日で50回以上編集した日がある。（さらに15点）', score: 15, skip: 3 },
-            { st1: '使用頻度', st2: '最大編集回数…', text: '4-3.先週、1日で100回以上編集した日がある。（さらに25点）', score: 25, skip: 2 },
-            { st1: '使用頻度', st2: '最大編集回数…', text: '4-4.先週、1日で200回以上編集した日がある。（さらに50点）', score: 50, skip: 1 },
-            { st1: '使用頻度', st2: '最大編集回数…', text: '4-5.先週、1日で300回以上編集した日がある。（さらに80点）', score: 80, skip: 0 },
-            { st1: '使用頻度', text: '5.現在、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7" target="_blank">編集回数の多いウィキペディアンの一覧</a>に名前が載っている。（50点）', score: 50, skip: 1 },
-            { st1: '使用頻度', text: '5-1.現在、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7" target="_blank">編集回数の多いウィキペディアンの一覧</a>の<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7#%E8%A8%98%E4%BA%8B%E5%90%8D%E5%89%8D%E7%A9%BA%E9%96%93" target="_blank">記事名前空間</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7#%E5%85%A8%E5%90%8D%E5%89%8D%E7%A9%BA%E9%96%93" target="_blank">全名前空間</a>の両方に名前が載っている。（さらに50点）', score: 50, skip: 0 },
-            { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-1.先週、ウィキペディアやそれに関する作業がネットの利用時間の半分以上を占めた。（10点）', score: 10, skip: 3 },
-            { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-2.先週、ウィキペディアやそれに関する作業がネットの利用時間の4分の3以上を占めた。（さらに15点）', score: 15, skip: 2 },
-            { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-3.先週、ネットの利用時間のすべてがウィキペディアやそれに関する作業だった。(さらに50点)', score: 50, skip: 1 },
-            { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-4.先週、ウィキペディアに関係しない作業にサイトを利用しなかった。（さらに25点）', score: 25, skip: 0 },
-            { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-5.先週、ウィキペディアを使いすぎて、<a href="https://ja.wikipedia.org/wiki/%E3%82%B9%E3%83%9E%E3%83%9B" target="_blank">スマホ</a>などの<a href="https://ja.wikipedia.org/wiki/%E3%83%90%E3%83%83%E3%83%86%E3%83%AA%E3%83%BC" target="_blank">バッテリー</a>が切れた。（50点）', score: 50, skip: 0 },
-            { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-6.ウィキペディアを使いすぎて友人との約束を忘れたことがある。(さらに50点)', score: 50, skip: 0 },
-            { st1: '使用頻度', text: '6-2.現在、<a href="https://ja.wikipedia.org/wiki/%E3%83%AF%E3%82%A4%E3%83%A4%E3%83%AC%E3%82%B9%E9%80%9A%E4%BF%A1" target="_blank">ワイヤレス通信</a>でウィキペディアを利用している。（2点）', score: 2, skip: 0 },
-            { st1: '編集の種類', text: '1.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%9B%96%E6%98%A7%E3%81%95%E5%9B%9E%E9%81%BF" target="_blank">曖昧さ回避ページ</a>や<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88" target="_blank">テンプレート</a>を編集した。（5点）', score: 5, skip: 0 },
-            { st1: '編集の種類', text: '2.先週、新しい記事を<a href="https://ja.wikipedia.org/wiki/Help:%E6%96%B0%E8%A6%8F%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%AE%E4%BD%9C%E6%88%90" target="_blank">作成</a>した。（作成した記事の数×10点）  (記事数を入力）', score: 0, skip: 0, kaz: 1, tk: 10 },
-            { st1: '編集の種類', st2: '雑草取り関連…', text: '3-1.最近、不適切な記事名は見つけ次第移動させている。（5点）', score: 5, skip: 0 },
-            { st1: '編集の種類', st2: '雑草取り関連…', text: '3-2.最近、読み仮名がない記事は、見つけ次第読み仮名をつけている。（5点）', score: 5, skip: 0 },
-            { st1: '編集の種類', st2: '雑草取り関連…', text: '3-3.記事名部分が太字化されていない記事は、太字化している。（3点）', score: 3, skip: 0 },
-            { st1: '編集の種類', st2: '雑草取り関連…', text: '3-4.最近、<a href="https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA" target="_blank">カテゴリ</a>がない記事やスタブカテゴリのみの記事は見つけ次第カテゴライズしている。（5点）', score: 5, skip: 0 },
-            { st1: '編集の種類', st2: '雑草取り関連…', text: '3-5.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%90%8C%E3%81%98%E8%A8%98%E4%BA%8B%E3%81%B8%E3%81%AE%E9%80%A3%E7%B6%9A%E6%8A%95%E7%A8%BF%E3%82%92%E6%B8%9B%E3%82%89%E3%81%99" target="_blank">同じ記事へ連続投稿</a>している利用者を見つけ次第、その利用者の<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%88%A9%E7%94%A8%E8%80%85%E3%83%9A%E3%83%BC%E3%82%B8#%E4%BC%9A%E8%A9%B1%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%A7%E3%81%A7%E3%81%8D%E3%82%8B%E3%81%93%E3%81%A8" target="_blank">会話ページ</a>に「<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC%E3%82%92%E8%A1%A8%E7%A4%BA" target="_blank">プレビュー機能</a>のお知らせ」を書いている。（5点）', score: 5, skip: 0 },
-            { st1: '利用者ページ', text: '1-1.最近、利用者ページの<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%B5%E3%83%96%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">サブページ</a>を作成・編集した。（10点）', score: 10, skip: 3 },
-            { st1: '利用者ページ', text: '1-2.最近、利用者ページのサブページを10回以上作成・編集した。（さらに20点）', score: 20, skip: 2 },
-            { st1: '利用者ページ', text: '1-3.最近、利用者ページのサブページを20回以上作成・編集した。（さらに40点）', score: 40, skip: 1 },
-            { st1: '利用者ページ', text: '1-4.最近、利用者ページのサブページを30回以上作成・編集した。（さらに60点）', score: 60, skip: 0 },
-            { st1: '議論や依頼', text: '1.先週、記事にコメントをしたり、記事に関する議論の拡大をしたりといったことをした。（2点）', score: 2, skip: 0 },
-            { st1: '議論や依頼', text: '2.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BA%95%E6%88%B8%E7%AB%AF" target="_blank">井戸端</a>で、コメントをするなどして議論に参加した。(20点)', score: 20, skip: 0 },
-            { st1: '議論や依頼', st2: '<a href="https://ja.wikipedia.org/wiki/Category:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88" target="_blank">コメントアイコンテンプレート</a>…', text: '3-1.最近、議論などの際、 賛成 （{{<a href="https://ja.wikipedia.org/wiki/Template:%E8%B3%9B%E6%88%90" target="_blank">賛成</a>}}）や コメント（{{<a href="https://ja.wikipedia.org/wiki/Template:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88" target="_blank">コメント</a>}}）といったようなテンプレートをよく使う。（2点）', score: 2, skip: 1 },
-            { st1: '議論や依頼', st2: '<a href="https://ja.wikipedia.org/wiki/Category:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88" target="_blank">コメントアイコンテンプレート</a>…', text: '3-2.最近、議論などの際、 賛成 （{{<a href="https://ja.wikipedia.org/wiki/Template:%E8%B3%9B%E6%88%90" target="_blank">賛成</a>}}）や コメント（{{<a href="https://ja.wikipedia.org/wiki/Template:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88" target="_blank">コメント</a>}}）といったようなテンプレートをほぼ毎回使う。（さらに5点）', score: 5, skip: 0 },
-            { st1: '議論や依頼', text: '4.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%9F%B7%E7%AD%86%E4%BE%9D%E9%A0%BC" target="_blank">執筆依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%AE%E6%AD%A3%E4%BE%9D%E9%A0%BC" target="_blank">修正依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%8A%A0%E7%AD%86%E4%BE%9D%E9%A0%BC" target="_blank">加筆依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%94%BB%E5%83%8F%E6%8F%90%E4%BE%9B%E4%BE%9D%E9%A0%BC" target="_blank">画像提供依頼</a>といったことを行った。（5点）', score: 5, skip: 0 },
-            { st1: '議論や依頼', text: '5.先週、執筆依頼、修正依頼、加筆依頼、画像提供依頼といった要求に応えた。（10点）', score: 10, skip: 0 },
-            { st1: '議論や依頼', text: '6.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%89%8A%E9%99%A4%E4%BE%9D%E9%A0%BC" target="_blank">削除依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%9D%E8%AD%B7%E4%BE%9D%E9%A0%BC" target="_blank">保護依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%8A%95%E7%A8%BF%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E4%BE%9D%E9%A0%BC" target="_blank">投稿ブロック依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%A7%BB%E5%8B%95%E4%BE%9D%E9%A0%BC" target="_blank">移動依頼</a>など、管理者権限に関係する依頼を提出した（<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%AE%A1%E7%90%86%E8%80%85%E4%BC%9D%E8%A8%80%E6%9D%BF" target="_blank">管理者伝言板</a>は除く）。（5点）', score: 5, skip: 0 },
-            { st1: '議論や依頼', text: '7.先週、削除依頼、保護依頼、投稿ブロック依頼、移動依頼などの依頼の議論に加わった。（5点）', score: 5, skip: 0 },
-            { st1: '議論や依頼', text: '8.先週、削除依頼、保護依頼、投稿ブロック依頼、移動依頼などの依頼を処理した。（5点）', score: 5, skip: 0 },
-            { st1: '議論や依頼', text: '9-1.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" target="_blank">ウィキプロジェクト</a>に新たに参加した。(30点)', score: 30, skip: 1 },
-            { st1: '議論や依頼', text: '9-2.最近、ウィキプロジェクトに10個以上新たに参加した。(さらに50点)', score: 50, skip: 0 },
-            { st1: '議論や依頼', text: '10.先週、「管理者伝言板」に報告を行った。（5点）', score: 5, skip: 0 },
-            { st1: '権限', text: '1.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%AE%A1%E7%90%86%E8%80%85" target="_blank">管理者</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%93%E3%83%A5%E3%83%BC%E3%83%AD%E3%82%AF%E3%83%A9%E3%83%83%E3%83%88" target="_blank">ビューロクラット</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC" target="_blank">チェックユーザー</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%82%B5%E3%82%A4%E3%83%88" target="_blank">オーバーサイト</a>になりたいと思っている。（5点）', score: 5, skip: 0 },
-            { st1: '権限', text: '2.既に管理者、ビューロクラット、チェックユーザー、オーバーサイトになっている（1つにつき20点）　（なっている数を入力）', score: 0, skip: 0, kaz: 2, tk: 20 },
-            { st1: 'グローバル活動', text: '1.最近、様々な言語のウィキペディアに参加したいが為に外国語を勉強している。（50点）', score: 50, skip: 0 },
-            { st1: 'グローバル活動', text: '2.最近、外国語ページを翻訳した。（50点）', score: 50, skip: 0 },
-            { st1: 'グローバル活動', text: '3.最近、違う言語のウィキペディアのページをよく編集・作成する。（1言語につき10点）　（言語数を入力）', score: 0, skip: 0, kaz: 3, tk: 10 },
-            { st1: 'グローバル活動', text: '4.最近、<a href="https://translatewiki.net/wiki/" target="_blank">translatewiki</a>で<a href="https://ja.wikipedia.org/wiki/MediaWiki" target="_blank">ウィキペディア・ソフトウェア</a>を翻訳した。（5点）', score: 5, skip: 0 },
-            { st1: 'ウィキペディアじゃないのに…', text: '1.最近、日時には<a href="https://ja.wikipedia.org/wiki/%E5%8D%94%E5%AE%9A%E4%B8%96%E7%95%8C%E6%99%82" target="_blank">UTC</a>や<a href="https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E6%A8%99%E6%BA%96%E6%99%82" target="_blank">JST</a>と補記したくなる。あるいは、日時にはそのように補記されていないと腹が立つ。（20点）', score: 20, skip: 0 },
-            { st1: 'ウィキペディアじゃないのに…', text: '2.最近、見かけた文章が<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%B8%AD%E7%AB%8B%E7%9A%84%E3%81%AA%E8%A6%B3%E7%82%B9" target="_blank">中立的な観点</a>に則していないと腹が立つ。（25点）', score: 25, skip: 0 },
-            { st1: 'ウィキペディアじゃないのに…', text: '2-1.このテストが中立的な観点に則していないと文句を言いたい。（さらに50点）', score: 50, skip: 0 },
-            { st1: 'ウィキペディアじゃないのに…', text: '3.最近、全角で書かれた数字や英単語を見ると半角に修正したくなる。（10点）', score: 10, skip: 0 },
-            { st1: 'ウィキペディアじゃないのに…', text: '4.最近、誤って、ウィキペディア以外で{{賛成}}や{{コメント}}などと入力してしまった。（10点）', score: 10, skip: 0 },
-            { st1: '<a href="https://ja.wikipedia.org/wiki/Help:MediaWiki" target="_blank">MediaWiki</a>じゃないのに…', text: '1.最近、MediaWikiの<a href="https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%A3%E3%82%AD" target="_blank">ウィキ</a>以外で文章を書くときに、[[（記事名）]]（<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%91%E3%82%A4%E3%83%97%E4%BB%98%E3%81%8D%E3%83%AA%E3%83%B3%E3%82%AF" target="_blank">パイプ付きリンク</a>も含む）でウィキペディアへリンクしようとした。（10点）', score: 10, skip: 0 },
-            { st1: '<a href="https://ja.wikipedia.org/wiki/Help:MediaWiki" target="_blank">MediaWiki</a>じゃないのに…', text: '2.最近、MediaWikiの<a href="https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%BC%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E8%A8%80%E8%AA%9E" target="_blank">マークアップ言語</a>で<a href="https://ja.wikipedia.org/wiki/HTML%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" target="_blank">HTMLファイル</a>を作ろうとした。（5点）<!--このページを作るときに最初aタグではなく[ ] をつかってしまったのはココだけの話ということで-->', score: 5, skip: 0 },
-            { st1: '<a href="https://ja.wikipedia.org/wiki/Help:MediaWiki" target="_blank">MediaWiki</a>じゃないのに…', text: '3.最近は、MediaWikiのマークアップ言語で会話をしている。（10点）', score: 10, skip: 0 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%B0%E3%81%97%E3%81%84%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">新しいページ</a>…', text: '1-1.最近、「新しいページ」を毎日確認している。（10点）', score: 10, skip: 2 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%B0%E3%81%97%E3%81%84%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">新しいページ</a>…', text: '1-2.最近、「新しいページ」を毎日10回以上確認している。（さらに20点）', score: 20, skip: 1 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%B0%E3%81%97%E3%81%84%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">新しいページ</a>…', text: '1-3.最近、「新しいページ」を毎日50回以上確認している。（さらに40点）', score: 40, skip: 0 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%9C%80%E8%BF%91%E3%81%AE%E6%9B%B4%E6%96%B0" target="_blank">最近の更新</a>…', text: '2-1.最近、「最近の更新」を毎日確認している。（10点）', score: 10, skip: 2 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%9C%80%E8%BF%91%E3%81%AE%E6%9B%B4%E6%96%B0" target="_blank">最近の更新</a>…', text: '2-2.最近、「最近の更新」を毎日10回以上確認している。（さらに20点）', score: 20, skip: 1 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%9C%80%E8%BF%91%E3%81%AE%E6%9B%B4%E6%96%B0" target="_blank">最近の更新</a>…', text: '2-3.最近、「最近の更新」を毎日50回以上確認している。（さらに40点）', score: 40, skip: 0 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-1.最近、「ウォッチリスト」を毎日確認している。（10点）', score: 10, skip: 3 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-2.最近、「ウォッチリスト」を毎日10回以上確認している。（さらに20点）', score: 20, skip: 2 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-3.最近、「ウォッチリスト」を毎日50回以上確認している。（さらに40点）', score: 40, skip: 1 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-4.最近、「ウォッチリスト」を毎日100回以上確認している。（さらに60点）', score: 60, skip: 0 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-5.最近、平均して1日に1個はウォッチリストに何かしら記事を入れている。（50点）', score: 50, skip: 1 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-6.最近、平均して1日に10個以上ウォッチリストに記事を入れている。（さらに100点）', score: 100, skip: 0 },
-            { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-7.最近、ウォッチリストを1日に5回以上整理している。（50点）', score: 50, skip: 0 },
-            { st1: '常にウィキペディア', text: '4.現在、LiveRC、Huggle、バンダル・ファイター、AWBを用いている。（1つにつき5点）　（用いてる数を入力）', score: 0, skip: 0, kaz: 4, tk: 5 },
-            { st1: '具体的症状', text: '1.最近、ウィキペディアが自分にとって重要なことに影響を及ぼしている。（30点）', score: 30, skip: 0 },
-            { st1: '具体的症状[身体的影響]', text: '1.最近、ウィキペディアを使い過ぎて頭痛を起こしたことがある。（10点）', score: 10, skip: 0 },
-            { st1: '具体的症状[身体的影響]', st2: '睡眠時間…', text: '2-1.最近、ウィキペディアのおかげで夜寝る時間が少ない(短くなった)。（15点）', score: 15, skip: 1 },
-            { st1: '具体的症状[身体的影響]', st2: '睡眠時間…', text: '2-2.最近、ウィキペディアのおかげで夜寝る時間が無い。（さらに25点）', score: 25, skip: 0 },
-            { st1: '具体的症状[身体的影響]', text: '3.最近は、夜通しウィキペディアを編集しているので、昼間に寝ている。（50点）', score: 50, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを使いたい…', text: '1-1.ウィキペディアを使わずには1日も我慢できない。（30点）', score: 30, skip: 1 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを使いたい…', text: '1-2.ウィキペディアを使わずには6時間すら我慢できない。（さらに40点）', score: 40, skip: 0 },
-            { st1: '具体的症状[精神的影響]', text: '2.三度の飯よりウィキペディア。（100点）', score: 100, skip: 0 },
-            { st1: '具体的症状[精神的影響]', text: '3.朝起きてすぐにウィキペディアを開く。(40点)', score: 40, skip: 0 },
-            { st1: '具体的症状[精神的影響]', text: '4.先週、ウィキペディアに関する夢を見た。（30点）', score: 30, skip: 0 },
-            { st1: '具体的症状[精神的影響]', text: '5.最近、ウィキペディアが使えない間は、ひたすら編集のネタを考えている。（10点）', score: 10, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-1.最近、「ウィ」という文字を見た際、ウィキペディアを連想してしまった。（10点）', score: 10, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-2.最近、「ウ」の文字を見た際、ウィキペディアを連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-3.最近、「w」の文字を見た際、wikipediaを連想してしまった。 （30点）', score: 30, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-4.最近、「PJ」の文字を見た際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" target="_blank">ウィキプロジェクト</a>を連想してしまった。（10点）', score: 10, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-5.最近、「P」の文字を見た際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" target="_blank">ウィキプロジェクト</a>あるいは<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9D%E3%83%BC%E3%82%BF%E3%83%AB" target="_blank">ウィキポータル</a>を連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-6.最近、「曖昧」又は「回避」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%9B%96%E6%98%A7%E3%81%95%E5%9B%9E%E9%81%BF" target="_blank">曖昧さ回避</a>を連想してしまった。（10点）', score: 10, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-7.最近、「削除」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%89%8A%E9%99%A4%E3%81%AE%E6%96%B9%E9%87%9D" target="_blank">ウィキペディアにおける削除</a>を連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-8.最近、「保護」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%9D%E8%AD%B7%E3%81%AE%E6%96%B9%E9%87%9D" target="_blank">ウィキペディアにおける保護</a>を連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-9.最近、「ブロック」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%8A%95%E7%A8%BF%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E3%81%AE%E6%96%B9%E9%87%9D" target="_blank">ウィキペディアにおける投稿ブロック</a>を連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-10.最近、「中立」又は「観点」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%B8%AD%E7%AB%8B%E7%9A%84%E3%81%AA%E8%A6%B3%E7%82%B9" target="_blank">ウィキペディアにおける「中立的な観点」</a>を連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-11.最近、「情報源」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%A1%E9%A0%BC%E3%81%A7%E3%81%8D%E3%82%8B%E6%83%85%E5%A0%B1%E6%BA%90" target="_blank">ウィキペディアにおける「信頼できる情報源」</a>を連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-12.最近、「検証」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%A4%9C%E8%A8%BC%E5%8F%AF%E8%83%BD%E6%80%A7" target="_blank">ウィキペディアにおける「検証可能性」</a>を連想してしまった。（20点）', score: 20, skip: 0 },
-            { st1: 'ウィキペディアのために', text: '1.最近、大切な人と電話、又は会話をしながらウィキペディアを閲覧した。（10点）', score: 10, skip: 0 },
-            { st1: 'ウィキペディアのために', text: '2.最近、自分の知らない分野の記事の更新・新規作成の為に他の百科事典で調べた。（20点）', score: 20, skip: 0 },
-            { st1: 'ウィキペディアのために', text: '3.最近、ウィキペディアの為に何らかのルールを破った。（20点）', score: 20, skip: 0 },
-            { st1: 'ウィキペディアを考える', text: '1.最近、ウィキペディアの社会的影響について考えた。（10点）', score: 10, skip: 0 },
-            { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-1.現在、ウィキペディアは、いずれ他の全ての百科事典を凌駕すると思っている。（10点）', score: 10, skip: 1 },
-            { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-2.現在、ウィキペディアは、既に他の全ての百科事典を凌駕していると思っている。（さらに20点）', score: 20, skip: 0 },
-            { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-3.現在、ウィキペディアは、いずれ他の全ての<a href="https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%A7%E3%83%96%E3%82%B5%E3%82%A4%E3%83%88" target="_blank">ウェブサイト</a>を凌駕すると思っている。（20点）', score: 20, skip: 1 },
-            { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-4.現在、ウィキペディアは、既に他の全てのウェブサイトを凌駕していると思っている。（さらに50点）', score: 50, skip: 0 },
-            { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアを宣伝…', text: '1-1.最近、ウィキペディアを薦めた、宣伝した。（1人につき15点）（人数を入力）', score: 0, skip: 0, kaz: 5, tk: 15 },
-            { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアを宣伝…', text: '1-2.その結果、その相手が実際にウィキペディアに参加した。（さらに1人につき15点）（人数を入力）', score: 0, skip: 0, kaz: 6, tk: 15 },
-            { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-1.これまでにウィキペディアに寄付をしたことがある。（10点）', score: 10, skip: 4 },
-            { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-2.累計で1000円以上寄付をした。（さらに20点）', score: 20, skip: 3 },
-            { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-3.累計で10000円以上寄付をした。（さらに20点）', score: 20, skip: 2 },
-            { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-4.累計で100000円以上寄付をした。（さらに50点）', score: 50, skip: 1 },
-            { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-5.累計で500000円以上寄付をした。（さらに100点）', score: 100, skip: 0 },
-            { st1: 'まだまだですね', text: '1.<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%AE%A1%E7%90%86%E8%80%85" target="_blank">シスオペ</a>という言葉の意味がわからない。（-10点）', score: -10, skip: 0 },
-            { st1: 'まだまだですね', text: '2.ウォッチリストを知らない。（-20点）', score: -20, skip: 0 },
-            { st1: 'まだまだですね', st2: 'ウィキペディアを使っていない…', text: '3-1.最近1週間以内にウィキペディアを使っていない。（-20点）', score: -20, skip: 2 },
-            { st1: 'まだまだですね', st2: 'ウィキペディアを使っていない…', text: '3-2.最近1ヶ月以内にウィキペディアを使っていない。（さらに-50点）', score: -50, skip: 1 },
-            { st1: 'まだまだですね', st2: 'ウィキペディアを使っていない…', text: '3-3.最近1年以内にウィキペディアを使っていない。（さらに-80点）', score: -80, skip: 0 },
-            { st1: 'まだまだですね', st2: 'ウィキペディアが嫌だ…', text: '4-1.「ウィキペディア」や「Wikipedia」という単語に嫌悪感を覚える。（-100点）', score: -100, skip: 0 },
-            { st1: 'まだまだですね', st2: 'ウィキペディアが嫌だ…', text: '4-2.「ウィキ」や「Wiki」という単語に嫌悪感を覚える。（さらに-100点）', score: -100, skip: 0 },
-            { st1: 'まだまだですね', st2: 'ウィキペディアが嫌だ…', text: '4-3.「ウ」や「W」の文字に嫌悪感を抱く。（さらに-100点）', score: -100, skip: 0 },
-            { st1: 'まだまだですね', text: '5.ウィキペディアに寄付をする人の気が知れない。（-10点）', score: -10, skip: 0 },
-            { st1: 'まだまだですね', text: '6.ウィキペディアは無くなった方がこの世界にとって良いと思っている。（-100点）', score: -100, skip: 0 },
-            { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-1.年に3回以上、このテストを受けている。（5点）', score: 5, skip: 3 },
-            { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-2.毎月、このテストを受けている。（さらに10点）', score: 10, skip: 2 },
-            { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-3.月2回以上、このテストを受けている。(さらに25点)', score: 25, skip: 1 },
-            { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-4.毎週、このテストを受けている。（さらに50点）', score: 50, skip: 0 },
-            { st1: 'このテスト自体', st2: 'テストの編集者側として…', text: '2-1.質問を作ったことがある。（20点）', score: 20, skip: 0 },
-            { st1: 'このテスト自体', st2: 'テストの編集者側として…', text: '2-2.時代遅れの質問をテストから取り除いたことがある。（30点）', score: 30, skip: 0 },
-            { st1: '読者として見たウィキペディア', st2: '検索時…', text: '1-1.最近、Yahoo!やGoogleなどの<a href="https://ja.wikipedia.org/wiki/%E6%A4%9C%E7%B4%A2%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3" target="_blank">検索エンジン</a>で言葉を検索した際に、ウィキペディアの結果をほぼ見る。（5点)', score: 5, skip: 0 },
-            { st1: '読者として見たウィキペディア', st2: '検索時…', text: '1-2.最近、言葉を検索する際は、検索エンジンを利用せず、Wikipedia内で直接検索する。（さらに15点)', score: 15, skip: 0 },
-            { st1: 'その他', text: '1.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E7%94%A8%E8%AA%9E%E9%9B%86" target="_blank">ウィキペディア用語</a>が変換候補の上位に挙がってくる。（2点）', score: 2, skip: 0 },
-            { st1: 'その他', text: '2.最近、私論を執筆した。（20点）', score: 20, skip: 0 },
-            { st1: 'その他', text: '3.最近、他人の編集の要約を編集したいと思った。（10点）', score: 10, skip: 0 },
-            { st1: 'その他', text: '4.最近、ウィキペディアを始めたばかりの頃の自分の未熟さを、他人の編集ミスから実感する。（10点）', score: 10, skip: 0 },
-            { st1: 'その他', text: '5.最近、<a href="https://en.wikipedia.org/wiki/Wikipedia:Awareness_statistics" target="_blank">知名度の統計</a>の更新を見て歓声を上げた。（5点）', score: 5, skip: 0 },
-            { st1: 'その他', text: '6.最近、ある記事を編集した流れで、その記事からリンクされている記事も編集してしまった。（5点）', score: 5, skip: 0 },
-            { st1: 'その他', text: '7.最近、サーバクラッシュがあって使えなくなると禁断症状が出る。（20点）', score: 20, skip: 0 },
-            { st1: 'その他', text: '8.<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%B8%E3%81%AE100%E3%81%AE%E8%B3%AA%E5%95%8F" target="_blank">ウィキペディアンへの100の質問</a>に答えている。（100点）', score: 100, skip: 0 },
-            { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-1.Wikipediaをブックマークに入れている。 (5点)', score: 5, skip: 0 },
-            { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-2.Wikipediaのショートカットをパソコンのデスクトップやスマホのホーム画面に作成している。 (10点)', score: 10, skip: 0 },
-            { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-3.Wikipediaをホームページにしている。（50点）', score: 50, skip: 1 },
-            { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-4.Wikipediaのみをホームページにしている。(さらに80点)', score: 80, skip: 0 },
-            { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-1.最近、利用者ページにバベルやユーザーボックスを新たに貼った。(20点)', score: 20, skip: 1 },
-            { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-2.最近、バベルやユーザーボックスを10個以上新たに貼った。(さらに30点)', score: 30, skip: 0 },
-            { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-3.最近、バベルやユーザーボックスを新たに作成・編集した。(20点)', score: 20, skip: 3 },
-            { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-4.最近、バベルやユーザーボックスを新たに10個以上作成・編集した。(さらに30点)', score: 30, skip: 2 },
-            { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-5.最近、バベルやユーザーボックスを新たに20個以上作成・編集した。(さらに50点)', score: 50, skip: 1 },
-            { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-6.最近、バベルやユーザーボックスを新たに30個以上作成・編集した。(さらに80点)', score: 80, skip: 0 },
-            { st1: 'その他', text: '11.<a href="https://ja.wikipedia.org/wiki/%E3%83%A9%E3%83%AA%E3%83%BC%E3%83%BB%E3%82%B5%E3%83%B3%E3%82%AC%E3%83%BC" target="_blank">ラリー・サンガー</a>が行った事について知っている。（50点）', score: 50, skip: 0 },
-            { st1: 'その他', text: '12.「<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%81%9F%E3%82%93" target="_blank">ウィキペたん</a>」を知っている。(45点)', score: 45, skip: 0 },
-            { st1: 'その他', text: '13.「<a href="https://meta.wikimedia.org/wiki/%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%94%E3%83%BC%E3%83%89" target="_blank">ウィキピード</a>」を知っている。（50点)', score: 50, skip: 0 },
-            { st1: 'その他', text: '14.最近、<a href="https://ja.wikipedia.org/wiki/%E5%8C%96%E5%90%88%E7%89%A9" target="_blank">化合物</a>の図を<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%94%BB%E5%83%8F%E6%8F%90%E4%BE%9B%E4%BE%9D%E9%A0%BC" target="_blank">要望</a>した。(20点)', score: 20, skip: 0 },
-            { st1: 'その他', text: '15.最近、新しい<a href="https://ja.wikipedia.org/wiki/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2" target="_blank">ソフトウェア</a>の機能を要求した。（10点）', score: 10, skip: 0 },
-            { st1: 'その他', text: '16.「w」と入力すると、変換候補1ページ目にウィキペディアあるいはWikipedia・Wikiなどがヒットする（10点）', score: 10, skip: 1 },
-            { st1: 'その他', text: '16-1.「w」と入力すると、ウィキペディアあるいはWikipedia・Wikiなどが変換候補1ページ目でかつ、一番上に出てくる（さらに20点）', score: 20, skip: 0 },
-            { st1: 'その他', text: '17.「j」とURLのボックスに入力すると、何かしらWikipediaのリンクが候補として出てくる（5点）', score: 5, skip: 1 },
-            { st1: 'その他', text: '17-1.URLの候補が全てWikipediaのURLである（さらに50点）', score: 50, skip: 0 },
-            { st1: '最後に', text: '1.頭はすべてWikipediaでおおわれている。(100点)', score: 100, skip: 0 },
-            { st1: '最後に', text: '2.こんな長いテストもWikipediaだから苦にならない。(50点)', score: 50, skip: 0 },
-        ];
-    generateTable(questions, kaito, urlParams);
-
-});
-
-function generateTable(questions, kaito, urlParams) {
-    const quizTable = document.getElementById('quizTable');
-    const scoreElement = document.getElementById('score');
-    const tedoElement = document.getElementById('tedo');
-    const comeElement = document.getElementById('come');
-    const usernElement = document.getElementById('usern');
-    let tableHTML = '<table class="table"><thead><tr><th></th><th></th><th>質問文</th><th>回答</th><th>点数</th></tr></thead><tbody>';
-    let kIndex = 0;
-    var tens = 0;
-    questions.forEach((question, index) => {
-        let answer = '';
-        var ts = 0;
-        if (question.kaz !== undefined) {
-            answer = urlParams.get(`KTO${question.kaz}`) || '未回答';
-            var ts = answer * question.tk
-            tens += ts
-        } else {
-            answer = kaito[kIndex] === '1' ? '◯' : '✕';
-            if (kaito[kIndex] === '1') {
-                tens += question.score;
-                var ts = question.score
-            }
-            kIndex++;
+    <title>Wikipedia中毒回答確認</title>
+    <style>
+        main {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
         }
 
-        tableHTML += `<tr>
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .kek {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        #usern {
+            font-size: 1.5em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #score,
+        #tedo,
+        #come {
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        #tedo {
+            font-size: 1.8em;
+        }
+
+        #come {
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            color: #333;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body onLoad="inmenu();">
+    <script type="text/javascript" src="../menu.js"></script>
+    <div id="menu"></div>
+    <main>
+        <h1>あなたはウィキペディア中毒でしょうかテスト回答確認ページ</h1>
+        <br />
+        <div class="kek">
+            <div id="usern"></div>
+            <div id="score" style="font-size: 150%;"></div>
+            <div id="tedo" style="font-size: 150%; font-weight:bold;"></div>
+            <div id="come"></div>
+        </div>
+        <div id="quizTable"></div>
+
+        <footer>
+            <p class="CC">このページはウィキペディア日本語版<a
+                    href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88"
+                    target="_blank">Wikipedia:あなたはウィキペディア中毒でしょうかテスト</a>の<a
+                    href="https://ja.wikipedia.org/w/index.php?title=Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88&oldid=99893843"
+                    target="_blank">2024年4月4日 (木) 10:50(UTC)の版</a>をもとに作成しています。<wbr>
+            <p xmlns:cc="http://creativecommons.org/ns#">This work by <span
+                    property="cc:attributionName">なノな15どバと</span> is licensed under <a
+                    href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank"
+                    rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img
+                        style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                        src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
+                        style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                        src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
+                        style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                        src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+            </p>
+        </footer>
+        <script>
+
+            console.log("ver 0.5.4");
+            document.addEventListener('DOMContentLoaded', () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                var ku0 = urlParams.get('kaito').split("Y");
+                console.log(ku0);
+                if (ku0[0] == 1) {
+                    var ki1 = 1;
+                    var ki2 = 2;
+                } else {
+                    console.log("エラーn1");
+                }
+                var ku1 = ku0[ki1].split("Z");
+                var ku2 = ku1.map(ku1 => parseInt(ku1, 32).toString(2).substring(1));
+                const kaito1 = ku2.join("") || '未回答またはエラー';
+
+                var kaito = kaito1.substring(1);
+                var kaito2 = kaito1.substring(0, 1);
+                var tens = 0;
+
+                var questions = [
+                    { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1 },
+                    { st1: '使用頻度', st2: '使用…', text: '1-1.先週は週3~4日程度で、ウィキペディアを使った。（3点）', score: 3, skip: 0 },
+                    { st1: '使用頻度', st2: '使用…', text: '1-2.先週は毎日、ウィキペディアを使った。（5点）', score: 5, skip: 2 },
+                    { st1: '使用頻度', st2: '使用…', text: '1-3.先月は毎日、ウィキペディアを使った。（さらに15点）', score: 15, skip: 1 },
+                    { st1: '使用頻度', st2: '使用…', text: '1-4.半年間毎日、ウィキペディアを使った。（さらに50点）', score: 50, skip: 0 },
+                    { st1: '使用頻度', st2: '編集…', text: '2-1.先週、1日も休まず<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%AE%E7%B7%A8%E9%9B%86" target="_blank">編集</a>した。（10点）', score: 10, skip: 1 },
+                    { st1: '使用頻度', st2: '編集…', text: '2-2.先月、1日も休まず編集した。（さらに20点）', score: 20, skip: 0 },
+                    { st1: '使用頻度', st2: '平均編集回数…', text: '3-1.先週、1日あたり5回以上編集した。（5点）', score: 5, skip: 6 },
+                    { st1: '使用頻度', st2: '平均編集回数…', text: '3-2.先週、1日あたり10回以上編集した。（さらに5点）', score: 5, skip: 5 },
+                    { st1: '使用頻度', st2: '平均編集回数…', text: '3-3.先週、1日あたり20回以上編集した。（さらに10点）', score: 10, skip: 4 },
+                    { st1: '使用頻度', st2: '平均編集回数…', text: '3-4.先週、1日あたり50回以上編集した。（さらに30点）', score: 30, skip: 3 },
+                    { st1: '使用頻度', st2: '平均編集回数…', text: '3-5.先週、1日あたり100回以上編集した。（さらに50点）', score: 50, skip: 2 },
+                    { st1: '使用頻度', st2: '平均編集回数…', text: '3-6.先週、1日あたり200回以上編集した。（さらに80点）', score: 80, skip: 1 },
+                    { st1: '使用頻度', st2: '平均編集回数…', text: '3-7.先週、1日あたり300回以上編集した。（さらに100点）', score: 100, skip: 0 },
+                    { st1: '使用頻度', st2: '最大編集回数…', text: '4-1.先週、1日で20回以上編集した日がある。（10点）', score: 10, skip: 4 },
+                    { st1: '使用頻度', st2: '最大編集回数…', text: '4-2.先週、1日で50回以上編集した日がある。（さらに15点）', score: 15, skip: 3 },
+                    { st1: '使用頻度', st2: '最大編集回数…', text: '4-3.先週、1日で100回以上編集した日がある。（さらに25点）', score: 25, skip: 2 },
+                    { st1: '使用頻度', st2: '最大編集回数…', text: '4-4.先週、1日で200回以上編集した日がある。（さらに50点）', score: 50, skip: 1 },
+                    { st1: '使用頻度', st2: '最大編集回数…', text: '4-5.先週、1日で300回以上編集した日がある。（さらに80点）', score: 80, skip: 0 },
+                    { st1: '使用頻度', text: '5.現在、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7" target="_blank">編集回数の多いウィキペディアンの一覧</a>に名前が載っている。（50点）', score: 50, skip: 1 },
+                    { st1: '使用頻度', text: '5-1.現在、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7" target="_blank">編集回数の多いウィキペディアンの一覧</a>の<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7#%E8%A8%98%E4%BA%8B%E5%90%8D%E5%89%8D%E7%A9%BA%E9%96%93" target="_blank">記事名前空間</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%B7%A8%E9%9B%86%E5%9B%9E%E6%95%B0%E3%81%AE%E5%A4%9A%E3%81%84%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%AE%E4%B8%80%E8%A6%A7#%E5%85%A8%E5%90%8D%E5%89%8D%E7%A9%BA%E9%96%93" target="_blank">全名前空間</a>の両方に名前が載っている。（さらに50点）', score: 50, skip: 0 },
+                    { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-1.先週、ウィキペディアやそれに関する作業がネットの利用時間の半分以上を占めた。（10点）', score: 10, skip: 3 },
+                    { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-2.先週、ウィキペディアやそれに関する作業がネットの利用時間の4分の3以上を占めた。（さらに15点）', score: 15, skip: 2 },
+                    { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-3.先週、ネットの利用時間のすべてがウィキペディアやそれに関する作業だった。(さらに50点)', score: 50, skip: 1 },
+                    { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-4.先週、ウィキペディアに関係しない作業にサイトを利用しなかった。（さらに25点）', score: 25, skip: 0 },
+                    { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-5.先週、ウィキペディアを使いすぎて、<a href="https://ja.wikipedia.org/wiki/%E3%82%B9%E3%83%9E%E3%83%9B" target="_blank">スマホ</a>などの<a href="https://ja.wikipedia.org/wiki/%E3%83%90%E3%83%83%E3%83%86%E3%83%AA%E3%83%BC" target="_blank">バッテリー</a>が切れた。（50点）', score: 50, skip: 0 },
+                    { st1: '使用頻度', st2: 'ネット利用の中のウィキペディア…', text: '6-1-6.ウィキペディアを使いすぎて友人との約束を忘れたことがある。(さらに50点)', score: 50, skip: 0 },
+                    { st1: '使用頻度', text: '6-2.現在、<a href="https://ja.wikipedia.org/wiki/%E3%83%AF%E3%82%A4%E3%83%A4%E3%83%AC%E3%82%B9%E9%80%9A%E4%BF%A1" target="_blank">ワイヤレス通信</a>でウィキペディアを利用している。（2点）', score: 2, skip: 0 },
+                    { st1: '編集の種類', text: '1.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%9B%96%E6%98%A7%E3%81%95%E5%9B%9E%E9%81%BF" target="_blank">曖昧さ回避ページ</a>や<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88" target="_blank">テンプレート</a>を編集した。（5点）', score: 5, skip: 0 },
+                    { st1: '編集の種類', text: '2.先週、新しい記事を<a href="https://ja.wikipedia.org/wiki/Help:%E6%96%B0%E8%A6%8F%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%AE%E4%BD%9C%E6%88%90" target="_blank">作成</a>した。（作成した記事の数×10点）  (記事数を入力）', score: 0, skip: 0, kaz: 1, tk: 10 },
+                    { st1: '編集の種類', st2: '雑草取り関連…', text: '3-1.最近、不適切な記事名は見つけ次第移動させている。（5点）', score: 5, skip: 0 },
+                    { st1: '編集の種類', st2: '雑草取り関連…', text: '3-2.最近、読み仮名がない記事は、見つけ次第読み仮名をつけている。（5点）', score: 5, skip: 0 },
+                    { st1: '編集の種類', st2: '雑草取り関連…', text: '3-3.記事名部分が太字化されていない記事は、太字化している。（3点）', score: 3, skip: 0 },
+                    { st1: '編集の種類', st2: '雑草取り関連…', text: '3-4.最近、<a href="https://ja.wikipedia.org/wiki/%E3%82%AB%E3%83%86%E3%82%B4%E3%83%AA" target="_blank">カテゴリ</a>がない記事やスタブカテゴリのみの記事は見つけ次第カテゴライズしている。（5点）', score: 5, skip: 0 },
+                    { st1: '編集の種類', st2: '雑草取り関連…', text: '3-5.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%90%8C%E3%81%98%E8%A8%98%E4%BA%8B%E3%81%B8%E3%81%AE%E9%80%A3%E7%B6%9A%E6%8A%95%E7%A8%BF%E3%82%92%E6%B8%9B%E3%82%89%E3%81%99" target="_blank">同じ記事へ連続投稿</a>している利用者を見つけ次第、その利用者の<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%88%A9%E7%94%A8%E8%80%85%E3%83%9A%E3%83%BC%E3%82%B8#%E4%BC%9A%E8%A9%B1%E3%83%9A%E3%83%BC%E3%82%B8%E3%81%A7%E3%81%A7%E3%81%8D%E3%82%8B%E3%81%93%E3%81%A8" target="_blank">会話ページ</a>に「<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%97%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC%E3%82%92%E8%A1%A8%E7%A4%BA" target="_blank">プレビュー機能</a>のお知らせ」を書いている。（5点）', score: 5, skip: 0 },
+                    { st1: '利用者ページ', text: '1-1.最近、利用者ページの<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%B5%E3%83%96%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">サブページ</a>を作成・編集した。（10点）', score: 10, skip: 3 },
+                    { st1: '利用者ページ', text: '1-2.最近、利用者ページのサブページを10回以上作成・編集した。（さらに20点）', score: 20, skip: 2 },
+                    { st1: '利用者ページ', text: '1-3.最近、利用者ページのサブページを20回以上作成・編集した。（さらに40点）', score: 40, skip: 1 },
+                    { st1: '利用者ページ', text: '1-4.最近、利用者ページのサブページを30回以上作成・編集した。（さらに60点）', score: 60, skip: 0 },
+                    { st1: '議論や依頼', text: '1.先週、記事にコメントをしたり、記事に関する議論の拡大をしたりといったことをした。（2点）', score: 2, skip: 0 },
+                    { st1: '議論や依頼', text: '2.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BA%95%E6%88%B8%E7%AB%AF" target="_blank">井戸端</a>で、コメントをするなどして議論に参加した。(20点)', score: 20, skip: 0 },
+                    { st1: '議論や依頼', st2: '<a href="https://ja.wikipedia.org/wiki/Category:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88" target="_blank">コメントアイコンテンプレート</a>…', text: '3-1.最近、議論などの際、 賛成 （{{<a href="https://ja.wikipedia.org/wiki/Template:%E8%B3%9B%E6%88%90" target="_blank">賛成</a>}}）や コメント（{{<a href="https://ja.wikipedia.org/wiki/Template:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88" target="_blank">コメント</a>}}）といったようなテンプレートをよく使う。（2点）', score: 2, skip: 1 },
+                    { st1: '議論や依頼', st2: '<a href="https://ja.wikipedia.org/wiki/Category:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88%E3%82%A2%E3%82%A4%E3%82%B3%E3%83%B3%E3%83%86%E3%83%B3%E3%83%97%E3%83%AC%E3%83%BC%E3%83%88" target="_blank">コメントアイコンテンプレート</a>…', text: '3-2.最近、議論などの際、 賛成 （{{<a href="https://ja.wikipedia.org/wiki/Template:%E8%B3%9B%E6%88%90" target="_blank">賛成</a>}}）や コメント（{{<a href="https://ja.wikipedia.org/wiki/Template:%E3%82%B3%E3%83%A1%E3%83%B3%E3%83%88" target="_blank">コメント</a>}}）といったようなテンプレートをほぼ毎回使う。（さらに5点）', score: 5, skip: 0 },
+                    { st1: '議論や依頼', text: '4.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%9F%B7%E7%AD%86%E4%BE%9D%E9%A0%BC" target="_blank">執筆依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%AE%E6%AD%A3%E4%BE%9D%E9%A0%BC" target="_blank">修正依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%8A%A0%E7%AD%86%E4%BE%9D%E9%A0%BC" target="_blank">加筆依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%94%BB%E5%83%8F%E6%8F%90%E4%BE%9B%E4%BE%9D%E9%A0%BC" target="_blank">画像提供依頼</a>といったことを行った。（5点）', score: 5, skip: 0 },
+                    { st1: '議論や依頼', text: '5.先週、執筆依頼、修正依頼、加筆依頼、画像提供依頼といった要求に応えた。（10点）', score: 10, skip: 0 },
+                    { st1: '議論や依頼', text: '6.先週、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%89%8A%E9%99%A4%E4%BE%9D%E9%A0%BC" target="_blank">削除依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%9D%E8%AD%B7%E4%BE%9D%E9%A0%BC" target="_blank">保護依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%8A%95%E7%A8%BF%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E4%BE%9D%E9%A0%BC" target="_blank">投稿ブロック依頼</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%A7%BB%E5%8B%95%E4%BE%9D%E9%A0%BC" target="_blank">移動依頼</a>など、管理者権限に関係する依頼を提出した（<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%AE%A1%E7%90%86%E8%80%85%E4%BC%9D%E8%A8%80%E6%9D%BF" target="_blank">管理者伝言板</a>は除く）。（5点）', score: 5, skip: 0 },
+                    { st1: '議論や依頼', text: '7.先週、削除依頼、保護依頼、投稿ブロック依頼、移動依頼などの依頼の議論に加わった。（5点）', score: 5, skip: 0 },
+                    { st1: '議論や依頼', text: '8.先週、削除依頼、保護依頼、投稿ブロック依頼、移動依頼などの依頼を処理した。（5点）', score: 5, skip: 0 },
+                    { st1: '議論や依頼', text: '9-1.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" target="_blank">ウィキプロジェクト</a>に新たに参加した。(30点)', score: 30, skip: 1 },
+                    { st1: '議論や依頼', text: '9-2.最近、ウィキプロジェクトに10個以上新たに参加した。(さらに50点)', score: 50, skip: 0 },
+                    { st1: '議論や依頼', text: '10.先週、「管理者伝言板」に報告を行った。（5点）', score: 5, skip: 0 },
+                    { st1: '権限', text: '1.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%AE%A1%E7%90%86%E8%80%85" target="_blank">管理者</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%93%E3%83%A5%E3%83%BC%E3%83%AD%E3%82%AF%E3%83%A9%E3%83%83%E3%83%88" target="_blank">ビューロクラット</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC" target="_blank">チェックユーザー</a>、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%AA%E3%83%BC%E3%83%90%E3%83%BC%E3%82%B5%E3%82%A4%E3%83%88" target="_blank">オーバーサイト</a>になりたいと思っている。（5点）', score: 5, skip: 0 },
+                    { st1: '権限', text: '2.既に管理者、ビューロクラット、チェックユーザー、オーバーサイトになっている（1つにつき20点）　（なっている数を入力）', score: 0, skip: 0, kaz: 2, tk: 20 },
+                    { st1: 'グローバル活動', text: '1.最近、様々な言語のウィキペディアに参加したいが為に外国語を勉強している。（50点）', score: 50, skip: 0 },
+                    { st1: 'グローバル活動', text: '2.最近、外国語ページを翻訳した。（50点）', score: 50, skip: 0 },
+                    { st1: 'グローバル活動', text: '3.最近、違う言語のウィキペディアのページをよく編集・作成する。（1言語につき10点）　（言語数を入力）', score: 0, skip: 0, kaz: 3, tk: 10 },
+                    { st1: 'グローバル活動', text: '4.最近、<a href="https://translatewiki.net/wiki/" target="_blank">translatewiki</a>で<a href="https://ja.wikipedia.org/wiki/MediaWiki" target="_blank">ウィキペディア・ソフトウェア</a>を翻訳した。（5点）', score: 5, skip: 0 },
+                    { st1: 'ウィキペディアじゃないのに…', text: '1.最近、日時には<a href="https://ja.wikipedia.org/wiki/%E5%8D%94%E5%AE%9A%E4%B8%96%E7%95%8C%E6%99%82" target="_blank">UTC</a>や<a href="https://ja.wikipedia.org/wiki/%E6%97%A5%E6%9C%AC%E6%A8%99%E6%BA%96%E6%99%82" target="_blank">JST</a>と補記したくなる。あるいは、日時にはそのように補記されていないと腹が立つ。（20点）', score: 20, skip: 0 },
+                    { st1: 'ウィキペディアじゃないのに…', text: '2.最近、見かけた文章が<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%B8%AD%E7%AB%8B%E7%9A%84%E3%81%AA%E8%A6%B3%E7%82%B9" target="_blank">中立的な観点</a>に則していないと腹が立つ。（25点）', score: 25, skip: 0 },
+                    { st1: 'ウィキペディアじゃないのに…', text: '2-1.このテストが中立的な観点に則していないと文句を言いたい。（さらに50点）', score: 50, skip: 0 },
+                    { st1: 'ウィキペディアじゃないのに…', text: '3.最近、全角で書かれた数字や英単語を見ると半角に修正したくなる。（10点）', score: 10, skip: 0 },
+                    { st1: 'ウィキペディアじゃないのに…', text: '4.最近、誤って、ウィキペディア以外で{{賛成}}や{{コメント}}などと入力してしまった。（10点）', score: 10, skip: 0 },
+                    { st1: '<a href="https://ja.wikipedia.org/wiki/Help:MediaWiki" target="_blank">MediaWiki</a>じゃないのに…', text: '1.最近、MediaWikiの<a href="https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%A3%E3%82%AD" target="_blank">ウィキ</a>以外で文章を書くときに、[[（記事名）]]（<a href="https://ja.wikipedia.org/wiki/Help:%E3%83%91%E3%82%A4%E3%83%97%E4%BB%98%E3%81%8D%E3%83%AA%E3%83%B3%E3%82%AF" target="_blank">パイプ付きリンク</a>も含む）でウィキペディアへリンクしようとした。（10点）', score: 10, skip: 0 },
+                    { st1: '<a href="https://ja.wikipedia.org/wiki/Help:MediaWiki" target="_blank">MediaWiki</a>じゃないのに…', text: '2.最近、MediaWikiの<a href="https://ja.wikipedia.org/wiki/%E3%83%9E%E3%83%BC%E3%82%AF%E3%82%A2%E3%83%83%E3%83%97%E8%A8%80%E8%AA%9E" target="_blank">マークアップ言語</a>で<a href="https://ja.wikipedia.org/wiki/HTML%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB" target="_blank">HTMLファイル</a>を作ろうとした。（5点）<!--このページを作るときに最初aタグではなく[ ] をつかってしまったのはココだけの話ということで-->', score: 5, skip: 0 },
+                    { st1: '<a href="https://ja.wikipedia.org/wiki/Help:MediaWiki" target="_blank">MediaWiki</a>じゃないのに…', text: '3.最近は、MediaWikiのマークアップ言語で会話をしている。（10点）', score: 10, skip: 0 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%B0%E3%81%97%E3%81%84%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">新しいページ</a>…', text: '1-1.最近、「新しいページ」を毎日確認している。（10点）', score: 10, skip: 2 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%B0%E3%81%97%E3%81%84%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">新しいページ</a>…', text: '1-2.最近、「新しいページ」を毎日10回以上確認している。（さらに20点）', score: 20, skip: 1 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%B0%E3%81%97%E3%81%84%E3%83%9A%E3%83%BC%E3%82%B8" target="_blank">新しいページ</a>…', text: '1-3.最近、「新しいページ」を毎日50回以上確認している。（さらに40点）', score: 40, skip: 0 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%9C%80%E8%BF%91%E3%81%AE%E6%9B%B4%E6%96%B0" target="_blank">最近の更新</a>…', text: '2-1.最近、「最近の更新」を毎日確認している。（10点）', score: 10, skip: 2 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%9C%80%E8%BF%91%E3%81%AE%E6%9B%B4%E6%96%B0" target="_blank">最近の更新</a>…', text: '2-2.最近、「最近の更新」を毎日10回以上確認している。（さらに20点）', score: 20, skip: 1 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%9C%80%E8%BF%91%E3%81%AE%E6%9B%B4%E6%96%B0" target="_blank">最近の更新</a>…', text: '2-3.最近、「最近の更新」を毎日50回以上確認している。（さらに40点）', score: 40, skip: 0 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-1.最近、「ウォッチリスト」を毎日確認している。（10点）', score: 10, skip: 3 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-2.最近、「ウォッチリスト」を毎日10回以上確認している。（さらに20点）', score: 20, skip: 2 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-3.最近、「ウォッチリスト」を毎日50回以上確認している。（さらに40点）', score: 40, skip: 1 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-4.最近、「ウォッチリスト」を毎日100回以上確認している。（さらに60点）', score: 60, skip: 0 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-5.最近、平均して1日に1個はウォッチリストに何かしら記事を入れている。（50点）', score: 50, skip: 1 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-6.最近、平均して1日に10個以上ウォッチリストに記事を入れている。（さらに100点）', score: 100, skip: 0 },
+                    { st1: '常にウィキペディア', st2: '<a href="https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E3%82%A6%E3%82%A9%E3%83%83%E3%83%81%E3%83%AA%E3%82%B9%E3%83%88" target="_blank">ウォッチリスト</a>…', text: '3-7.最近、ウォッチリストを1日に5回以上整理している。（50点）', score: 50, skip: 0 },
+                    { st1: '常にウィキペディア', text: '4.現在、LiveRC、Huggle、バンダル・ファイター、AWBを用いている。（1つにつき5点）　（用いてる数を入力）', score: 0, skip: 0, kaz: 4, tk: 5 },
+                    { st1: '具体的症状', text: '1.最近、ウィキペディアが自分にとって重要なことに影響を及ぼしている。（30点）', score: 30, skip: 0 },
+                    { st1: '具体的症状[身体的影響]', text: '1.最近、ウィキペディアを使い過ぎて頭痛を起こしたことがある。（10点）', score: 10, skip: 0 },
+                    { st1: '具体的症状[身体的影響]', st2: '睡眠時間…', text: '2-1.最近、ウィキペディアのおかげで夜寝る時間が少ない(短くなった)。（15点）', score: 15, skip: 1 },
+                    { st1: '具体的症状[身体的影響]', st2: '睡眠時間…', text: '2-2.最近、ウィキペディアのおかげで夜寝る時間が無い。（さらに25点）', score: 25, skip: 0 },
+                    { st1: '具体的症状[身体的影響]', text: '3.最近は、夜通しウィキペディアを編集しているので、昼間に寝ている。（50点）', score: 50, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを使いたい…', text: '1-1.ウィキペディアを使わずには1日も我慢できない。（30点）', score: 30, skip: 1 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを使いたい…', text: '1-2.ウィキペディアを使わずには6時間すら我慢できない。（さらに40点）', score: 40, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', text: '2.三度の飯よりウィキペディア。（100点）', score: 100, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', text: '3.朝起きてすぐにウィキペディアを開く。(40点)', score: 40, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', text: '4.先週、ウィキペディアに関する夢を見た。（30点）', score: 30, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', text: '5.最近、ウィキペディアが使えない間は、ひたすら編集のネタを考えている。（10点）', score: 10, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-1.最近、「ウィ」という文字を見た際、ウィキペディアを連想してしまった。（10点）', score: 10, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-2.最近、「ウ」の文字を見た際、ウィキペディアを連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-3.最近、「w」の文字を見た際、wikipediaを連想してしまった。 （30点）', score: 30, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-4.最近、「PJ」の文字を見た際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" target="_blank">ウィキプロジェクト</a>を連想してしまった。（10点）', score: 10, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-5.最近、「P」の文字を見た際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88" target="_blank">ウィキプロジェクト</a>あるいは<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9D%E3%83%BC%E3%82%BF%E3%83%AB" target="_blank">ウィキポータル</a>を連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-6.最近、「曖昧」又は「回避」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%9B%96%E6%98%A7%E3%81%95%E5%9B%9E%E9%81%BF" target="_blank">曖昧さ回避</a>を連想してしまった。（10点）', score: 10, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-7.最近、「削除」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E5%89%8A%E9%99%A4%E3%81%AE%E6%96%B9%E9%87%9D" target="_blank">ウィキペディアにおける削除</a>を連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-8.最近、「保護」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%9D%E8%AD%B7%E3%81%AE%E6%96%B9%E9%87%9D" target="_blank">ウィキペディアにおける保護</a>を連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-9.最近、「ブロック」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%8A%95%E7%A8%BF%E3%83%96%E3%83%AD%E3%83%83%E3%82%AF%E3%81%AE%E6%96%B9%E9%87%9D" target="_blank">ウィキペディアにおける投稿ブロック</a>を連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-10.最近、「中立」又は「観点」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%B8%AD%E7%AB%8B%E7%9A%84%E3%81%AA%E8%A6%B3%E7%82%B9" target="_blank">ウィキペディアにおける「中立的な観点」</a>を連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-11.最近、「情報源」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E4%BF%A1%E9%A0%BC%E3%81%A7%E3%81%8D%E3%82%8B%E6%83%85%E5%A0%B1%E6%BA%90" target="_blank">ウィキペディアにおける「信頼できる情報源」</a>を連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: '具体的症状[精神的影響]', st2: 'ウィキペディアを連想する…', text: '6-12.最近、「検証」という言葉を見聞きした際、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E6%A4%9C%E8%A8%BC%E5%8F%AF%E8%83%BD%E6%80%A7" target="_blank">ウィキペディアにおける「検証可能性」</a>を連想してしまった。（20点）', score: 20, skip: 0 },
+                    { st1: 'ウィキペディアのために', text: '1.最近、大切な人と電話、又は会話をしながらウィキペディアを閲覧した。（10点）', score: 10, skip: 0 },
+                    { st1: 'ウィキペディアのために', text: '2.最近、自分の知らない分野の記事の更新・新規作成の為に他の百科事典で調べた。（20点）', score: 20, skip: 0 },
+                    { st1: 'ウィキペディアのために', text: '3.最近、ウィキペディアの為に何らかのルールを破った。（20点）', score: 20, skip: 0 },
+                    { st1: 'ウィキペディアを考える', text: '1.最近、ウィキペディアの社会的影響について考えた。（10点）', score: 10, skip: 0 },
+                    { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-1.現在、ウィキペディアは、いずれ他の全ての百科事典を凌駕すると思っている。（10点）', score: 10, skip: 1 },
+                    { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-2.現在、ウィキペディアは、既に他の全ての百科事典を凌駕していると思っている。（さらに20点）', score: 20, skip: 0 },
+                    { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-3.現在、ウィキペディアは、いずれ他の全ての<a href="https://ja.wikipedia.org/wiki/%E3%82%A6%E3%82%A7%E3%83%96%E3%82%B5%E3%82%A4%E3%83%88" target="_blank">ウェブサイト</a>を凌駕すると思っている。（20点）', score: 20, skip: 1 },
+                    { st1: 'ウィキペディアを考える', st2: 'ウィキペディアは偉大だ…', text: '2-4.現在、ウィキペディアは、既に他の全てのウェブサイトを凌駕していると思っている。（さらに50点）', score: 50, skip: 0 },
+                    { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアを宣伝…', text: '1-1.最近、ウィキペディアを薦めた、宣伝した。（1人につき15点）（人数を入力）', score: 0, skip: 0, kaz: 5, tk: 15 },
+                    { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアを宣伝…', text: '1-2.その結果、その相手が実際にウィキペディアに参加した。（さらに1人につき15点）（人数を入力）', score: 0, skip: 0, kaz: 6, tk: 15 },
+                    { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-1.これまでにウィキペディアに寄付をしたことがある。（10点）', score: 10, skip: 4 },
+                    { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-2.累計で1000円以上寄付をした。（さらに20点）', score: 20, skip: 3 },
+                    { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-3.累計で10000円以上寄付をした。（さらに20点）', score: 20, skip: 2 },
+                    { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-4.累計で100000円以上寄付をした。（さらに50点）', score: 50, skip: 1 },
+                    { st1: 'ウィキペディアの勢力拡大', st2: 'ウィキペディアに寄付…', text: '2-5.累計で500000円以上寄付をした。（さらに100点）', score: 100, skip: 0 },
+                    { st1: 'まだまだですね', text: '1.<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%AE%A1%E7%90%86%E8%80%85" target="_blank">シスオペ</a>という言葉の意味がわからない。（-10点）', score: -10, skip: 0 },
+                    { st1: 'まだまだですね', text: '2.ウォッチリストを知らない。（-20点）', score: -20, skip: 0 },
+                    { st1: 'まだまだですね', st2: 'ウィキペディアを使っていない…', text: '3-1.最近1週間以内にウィキペディアを使っていない。（-20点）', score: -20, skip: 2 },
+                    { st1: 'まだまだですね', st2: 'ウィキペディアを使っていない…', text: '3-2.最近1ヶ月以内にウィキペディアを使っていない。（さらに-50点）', score: -50, skip: 1 },
+                    { st1: 'まだまだですね', st2: 'ウィキペディアを使っていない…', text: '3-3.最近1年以内にウィキペディアを使っていない。（さらに-80点）', score: -80, skip: 0 },
+                    { st1: 'まだまだですね', st2: 'ウィキペディアが嫌だ…', text: '4-1.「ウィキペディア」や「Wikipedia」という単語に嫌悪感を覚える。（-100点）', score: -100, skip: 0 },
+                    { st1: 'まだまだですね', st2: 'ウィキペディアが嫌だ…', text: '4-2.「ウィキ」や「Wiki」という単語に嫌悪感を覚える。（さらに-100点）', score: -100, skip: 0 },
+                    { st1: 'まだまだですね', st2: 'ウィキペディアが嫌だ…', text: '4-3.「ウ」や「W」の文字に嫌悪感を抱く。（さらに-100点）', score: -100, skip: 0 },
+                    { st1: 'まだまだですね', text: '5.ウィキペディアに寄付をする人の気が知れない。（-10点）', score: -10, skip: 0 },
+                    { st1: 'まだまだですね', text: '6.ウィキペディアは無くなった方がこの世界にとって良いと思っている。（-100点）', score: -100, skip: 0 },
+                    { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-1.年に3回以上、このテストを受けている。（5点）', score: 5, skip: 3 },
+                    { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-2.毎月、このテストを受けている。（さらに10点）', score: 10, skip: 2 },
+                    { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-3.月2回以上、このテストを受けている。(さらに25点)', score: 25, skip: 1 },
+                    { st1: 'このテスト自体', st2: 'テストを受ける頻度…', text: '1-4.毎週、このテストを受けている。（さらに50点）', score: 50, skip: 0 },
+                    { st1: 'このテスト自体', st2: 'テストの編集者側として…', text: '2-1.質問を作ったことがある。（20点）', score: 20, skip: 0 },
+                    { st1: 'このテスト自体', st2: 'テストの編集者側として…', text: '2-2.時代遅れの質問をテストから取り除いたことがある。（30点）', score: 30, skip: 0 },
+                    { st1: '読者として見たウィキペディア', st2: '検索時…', text: '1-1.最近、Yahoo!やGoogleなどの<a href="https://ja.wikipedia.org/wiki/%E6%A4%9C%E7%B4%A2%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%B3" target="_blank">検索エンジン</a>で言葉を検索した際に、ウィキペディアの結果をほぼ見る。（5点)', score: 5, skip: 0 },
+                    { st1: '読者として見たウィキペディア', st2: '検索時…', text: '1-2.最近、言葉を検索する際は、検索エンジンを利用せず、Wikipedia内で直接検索する。（さらに15点)', score: 15, skip: 0 },
+                    { st1: 'その他', text: '1.最近、<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E7%94%A8%E8%AA%9E%E9%9B%86" target="_blank">ウィキペディア用語</a>が変換候補の上位に挙がってくる。（2点）', score: 2, skip: 0 },
+                    { st1: 'その他', text: '2.最近、私論を執筆した。（20点）', score: 20, skip: 0 },
+                    { st1: 'その他', text: '3.最近、他人の編集の要約を編集したいと思った。（10点）', score: 10, skip: 0 },
+                    { st1: 'その他', text: '4.最近、ウィキペディアを始めたばかりの頃の自分の未熟さを、他人の編集ミスから実感する。（10点）', score: 10, skip: 0 },
+                    { st1: 'その他', text: '5.最近、<a href="https://en.wikipedia.org/wiki/Wikipedia:Awareness_statistics" target="_blank">知名度の統計</a>の更新を見て歓声を上げた。（5点）', score: 5, skip: 0 },
+                    { st1: 'その他', text: '6.最近、ある記事を編集した流れで、その記事からリンクされている記事も編集してしまった。（5点）', score: 5, skip: 0 },
+                    { st1: 'その他', text: '7.最近、サーバクラッシュがあって使えなくなると禁断症状が出る。（20点）', score: 20, skip: 0 },
+                    { st1: 'その他', text: '8.<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E3%83%B3%E3%81%B8%E3%81%AE100%E3%81%AE%E8%B3%AA%E5%95%8F" target="_blank">ウィキペディアンへの100の質問</a>に答えている。（100点）', score: 100, skip: 0 },
+                    { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-1.Wikipediaをブックマークに入れている。 (5点)', score: 5, skip: 0 },
+                    { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-2.Wikipediaのショートカットをパソコンのデスクトップやスマホのホーム画面に作成している。 (10点)', score: 10, skip: 0 },
+                    { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-3.Wikipediaをホームページにしている。（50点）', score: 50, skip: 1 },
+                    { st1: 'その他', st2: 'Wikipediaをホームページやブックマークに…', text: '9-4.Wikipediaのみをホームページにしている。(さらに80点)', score: 80, skip: 0 },
+                    { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-1.最近、利用者ページにバベルやユーザーボックスを新たに貼った。(20点)', score: 20, skip: 1 },
+                    { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-2.最近、バベルやユーザーボックスを10個以上新たに貼った。(さらに30点)', score: 30, skip: 0 },
+                    { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-3.最近、バベルやユーザーボックスを新たに作成・編集した。(20点)', score: 20, skip: 3 },
+                    { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-4.最近、バベルやユーザーボックスを新たに10個以上作成・編集した。(さらに30点)', score: 30, skip: 2 },
+                    { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-5.最近、バベルやユーザーボックスを新たに20個以上作成・編集した。(さらに50点)', score: 50, skip: 1 },
+                    { st1: 'その他', st2: '<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%90%E3%83%99%E3%83%AB" target="_blank">バベル</a>・<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%83%9C%E3%83%83%E3%82%AF%E3%82%B9" target="_blank">ユーザーボックス</a>…', text: '10-6.最近、バベルやユーザーボックスを新たに30個以上作成・編集した。(さらに80点)', score: 80, skip: 0 },
+                    { st1: 'その他', text: '11.<a href="https://ja.wikipedia.org/wiki/%E3%83%A9%E3%83%AA%E3%83%BC%E3%83%BB%E3%82%B5%E3%83%B3%E3%82%AC%E3%83%BC" target="_blank">ラリー・サンガー</a>が行った事について知っている。（50点）', score: 50, skip: 0 },
+                    { st1: 'その他', text: '12.「<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%81%9F%E3%82%93" target="_blank">ウィキペたん</a>」を知っている。(45点)', score: 45, skip: 0 },
+                    { st1: 'その他', text: '13.「<a href="https://meta.wikimedia.org/wiki/%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%94%E3%83%BC%E3%83%89" target="_blank">ウィキピード</a>」を知っている。（50点)', score: 50, skip: 0 },
+                    { st1: 'その他', text: '14.最近、<a href="https://ja.wikipedia.org/wiki/%E5%8C%96%E5%90%88%E7%89%A9" target="_blank">化合物</a>の図を<a href="https://ja.wikipedia.org/wiki/Wikipedia:%E7%94%BB%E5%83%8F%E6%8F%90%E4%BE%9B%E4%BE%9D%E9%A0%BC" target="_blank">要望</a>した。(20点)', score: 20, skip: 0 },
+                    { st1: 'その他', text: '15.最近、新しい<a href="https://ja.wikipedia.org/wiki/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2" target="_blank">ソフトウェア</a>の機能を要求した。（10点）', score: 10, skip: 0 },
+                    { st1: 'その他', text: '16.「w」と入力すると、変換候補1ページ目にウィキペディアあるいはWikipedia・Wikiなどがヒットする（10点）', score: 10, skip: 1 },
+                    { st1: 'その他', text: '16-1.「w」と入力すると、ウィキペディアあるいはWikipedia・Wikiなどが変換候補1ページ目でかつ、一番上に出てくる（さらに20点）', score: 20, skip: 0 },
+                    { st1: 'その他', text: '17.「j」とURLのボックスに入力すると、何かしらWikipediaのリンクが候補として出てくる（5点）', score: 5, skip: 1 },
+                    { st1: 'その他', text: '17-1.URLの候補が全てWikipediaのURLである（さらに50点）', score: 50, skip: 0 },
+                    { st1: '最後に', text: '1.頭はすべてWikipediaでおおわれている。(100点)', score: 100, skip: 0 },
+                    { st1: '最後に', text: '2.こんな長いテストもWikipediaだから苦にならない。(50点)', score: 50, skip: 0 },
+                ];
+                generateTable(questions, kaito, urlParams);
+
+            });
+
+            function generateTable(questions, kaito, urlParams) {
+                const quizTable = document.getElementById('quizTable');
+                const scoreElement = document.getElementById('score');
+                const tedoElement = document.getElementById('tedo');
+                const comeElement = document.getElementById('come');
+                const usernElement = document.getElementById('usern');
+                let tableHTML = '<table class="table"><thead><tr><th></th><th></th><th>質問文</th><th>回答</th><th>点数</th></tr></thead><tbody>';
+                let kIndex = 0;
+                var tens = 0;
+                questions.forEach((question, index) => {
+                    let answer = '';
+                    var ts = 0;
+                    if (question.kaz !== undefined) {
+                        answer = parseInt(ku0[question.kaz + ki2], 32).toString(10) || '未回答';
+                        var ts = answer * question.tk
+                        tens += ts
+                    } else {
+                        answer = kaito[kIndex] === '1' ? '◯' : '✕';
+                        if (kaito[kIndex] === '1') {
+                            tens += question.score;
+                            var ts = question.score
+                        }
+                        kIndex++;
+                    }
+
+                    tableHTML += `<tr>
                         <td>${question.st1}</td>
                         <td>${question.st2 || ''}</td>
                         <td>${question.text}</td>
                         <td>${answer}</td>
                         <td>${ts}</td>
                       </tr>`;
-    });
+                });
 
-    tableHTML += '</tbody></table>';
-    quizTable.innerHTML = tableHTML;
-    usernElement.innerHTML = urlParams.get('USER') + "さんの結果は";
-    
-    var totalScore = tens;
-    scoreElement.innerHTML = `合計点: ${totalScore}<br>`;
+                tableHTML += '</tbody></table>';
+                quizTable.innerHTML = tableHTML;
+                usernElement.innerHTML = urlParams.get('USER') + "さんの結果は";
 
-            if (-199 <= totalScore && totalScore <= -150) {
-                tedoElement.innerHTML = '拒絶症';
-                comeElement.innerHTML = '貴方はウィキペディア拒絶症です。心の底からウィキペディアを憎んでいます。どうにかウィキペディアを好きになってください。';
-            } else if (-149 <= totalScore && totalScore <= -100) {
-                tedoElement.innerHTML = '無関係';
-                tedoElement.style.color = '#808080';
-                comeElement.innerHTML = 'ウィキペディア分が、まだ必要ないようです。';
-            } else if (-99 <= totalScore && totalScore <= -50) {
-                tedoElement.innerHTML = '無関係';
-                tedoElement.style.color = '#808080';
-                comeElement.innerHTML = 'ウィキペディアとは無関係です。';
-            } else if (-49 <= totalScore && totalScore <= -1) {
-                tedoElement.innerHTML = '無関係';
-                tedoElement.style.color = '#808080';
-                comeElement.innerHTML = 'う～ん……、まだまだウィキペディアとは無関係というところでしょうか？';
-            } else if (0 <= totalScore && totalScore <= 49) {
-                tedoElement.innerHTML = '許容範囲';
-                tedoElement.style.color = '#008000';
-                comeElement.innerHTML = 'ウィキペディア分が、まだ必要ないようです。';
-            } else if (50 <= totalScore && totalScore <= 149) {
-                tedoElement.innerHTML = '許容範囲';
-                tedoElement.style.color = '#008000';
-                comeElement.innerHTML = '適正範囲。';
-            } else if (150 <= totalScore && totalScore <= 229) {
-                tedoElement.innerHTML = '許容範囲';
-                tedoElement.style.color = '#008000';
-                comeElement.innerHTML = '適正範囲。生産力も最高潮です。';
-            } else if (230 <= totalScore && totalScore <= 269) {
-                tedoElement.innerHTML = '予備軍';
-                tedoElement.style.color = '#e6bf00';
-                comeElement.innerHTML = '依存注意。';
-            } else if (270 <= totalScore && totalScore <= 309) {
-                tedoElement.innerHTML = '予備軍';
-                tedoElement.style.color = '#e6bf00';
-                comeElement.innerHTML = '依存2km前です。';
-            } else if (310 <= totalScore && totalScore <= 359) {
-                tedoElement.innerHTML = '予備軍';
-                tedoElement.style.color = '#e6bf00';
-                comeElement.innerHTML = '依存1km前です。';
-            } else if (360 <= totalScore && totalScore <= 399) {
-                tedoElement.innerHTML = '予備軍';
-                tedoElement.style.color = '#e6bf00';
-                comeElement.innerHTML = '依存寸前です。';
-            } else if (400 <= totalScore && totalScore <= 439) {
-                tedoElement.innerHTML = '軽症';
-                tedoElement.style.color = '#ff9933';
-                comeElement.innerHTML = '依存しました。';
-            } else if (440 <= totalScore && totalScore <= 499) {
-                tedoElement.innerHTML = '軽症';
-                tedoElement.style.color = '#ff9933';
-                comeElement.innerHTML = '典型的な依存症ですね。';
-            } else if (500 <= totalScore && totalScore <= 549) {
-                tedoElement.innerHTML = '中等症';
-                tedoElement.style.color = '#ff6600';
-                comeElement.innerHTML = 'ここまで来ると……いやはや、もう危険ですよ。';
-            } else if (550 <= totalScore && totalScore <= 599) {
-                tedoElement.innerHTML = '中等症';
-                tedoElement.style.color = '#ff6600';
-                comeElement.innerHTML = '依存以上ですね。限度を越えています。';
-            } else if (600 <= totalScore && totalScore <= 649) {
-                tedoElement.innerHTML = '重症';
-                tedoElement.style.color = '#65318e';
-                comeElement.innerHTML = '貴方はWikipediaの管理者に立候補するべきです。';
-            } else if (650 <= totalScore && totalScore <= 699) {
-                tedoElement.innerHTML = '重症';
-                tedoElement.style.color = '#65318e';
-                comeElement.innerHTML = 'ビューロクラットに立候補しましょう!!';
-            } else if (700 <= totalScore && totalScore <= 749) {
-                tedoElement.innerHTML = '重症';
-                tedoElement.style.color = '#65318e';
-                comeElement.innerHTML = '是非ともスチュワードになろう!';
-            } else if (750 <= totalScore && totalScore <= 799) {
-                tedoElement.innerHTML = '重体';
-                tedoElement.style.color = '#65318e';
-                comeElement.innerHTML = 'ここまでくると重体ですね。';
-            } else if (800 <= totalScore && totalScore <= 849) {
-                tedoElement.innerHTML = '重体';
-                tedoElement.style.color = '#65318e';
-                comeElement.innerHTML = '貴方はWikipediaを制覇しました。';
-            } else if (850 <= totalScore && totalScore <= 929) {
-                tedoElement.innerHTML = '重篤';
-                tedoElement.style.color = '#460e44';
-                comeElement.innerHTML = 'Wikipediaが使えない日があるとセンチメンタルになります。';
-            } else if (930 <= totalScore && totalScore <= 969) {
-                tedoElement.innerHTML = '重篤';
-                tedoElement.style.color = '#460e44';
-                comeElement.innerHTML = '半日以上ウィキペディアを使えないとセンチメンタルになります。';
-            } else if (970 <= totalScore && totalScore <= 999) {
-                tedoElement.innerHTML = '禁断症状';
-                comeElement.innerHTML = 'ウィキペディアがないと禁断症状が現れます。社会復帰は諦めましょう。';
-            } else if (1000 <= totalScore && totalScore <= 1499) {
-                tedoElement.innerHTML = '禁断症状';
-                comeElement.innerHTML = 'ウィキペディアから目を離した途端に何かの発作が起きるでしょう。';
-            } else if (1500 <= totalScore) {
-                tedoElement.innerHTML = '禁断症状';
-                comeElement.innerHTML = 'もはや、ウィキペディアなしに生きられません。あなたは、ウィキペディアから目を離したら死ぬでしょう。';
-            } else {
-                tedoElement.innerHTML = 'エラーまたは診断対象外です。';
+                var totalScore = tens;
+                scoreElement.innerHTML = `合計点: ${totalScore}<br>`;
+
+                if (-199 <= totalScore && totalScore <= -150) {
+                    tedoElement.innerHTML = '拒絶症';
+                    comeElement.innerHTML = '貴方はウィキペディア拒絶症です。心の底からウィキペディアを憎んでいます。どうにかウィキペディアを好きになってください。';
+                } else if (-149 <= totalScore && totalScore <= -100) {
+                    tedoElement.innerHTML = '無関係';
+                    tedoElement.style.color = '#808080';
+                    comeElement.innerHTML = 'ウィキペディア分が、まだ必要ないようです。';
+                } else if (-99 <= totalScore && totalScore <= -50) {
+                    tedoElement.innerHTML = '無関係';
+                    tedoElement.style.color = '#808080';
+                    comeElement.innerHTML = 'ウィキペディアとは無関係です。';
+                } else if (-49 <= totalScore && totalScore <= -1) {
+                    tedoElement.innerHTML = '無関係';
+                    tedoElement.style.color = '#808080';
+                    comeElement.innerHTML = 'う～ん……、まだまだウィキペディアとは無関係というところでしょうか？';
+                } else if (0 <= totalScore && totalScore <= 49) {
+                    tedoElement.innerHTML = '許容範囲';
+                    tedoElement.style.color = '#008000';
+                    comeElement.innerHTML = 'ウィキペディア分が、まだ必要ないようです。';
+                } else if (50 <= totalScore && totalScore <= 149) {
+                    tedoElement.innerHTML = '許容範囲';
+                    tedoElement.style.color = '#008000';
+                    comeElement.innerHTML = '適正範囲。';
+                } else if (150 <= totalScore && totalScore <= 229) {
+                    tedoElement.innerHTML = '許容範囲';
+                    tedoElement.style.color = '#008000';
+                    comeElement.innerHTML = '適正範囲。生産力も最高潮です。';
+                } else if (230 <= totalScore && totalScore <= 269) {
+                    tedoElement.innerHTML = '予備軍';
+                    tedoElement.style.color = '#e6bf00';
+                    comeElement.innerHTML = '依存注意。';
+                } else if (270 <= totalScore && totalScore <= 309) {
+                    tedoElement.innerHTML = '予備軍';
+                    tedoElement.style.color = '#e6bf00';
+                    comeElement.innerHTML = '依存2km前です。';
+                } else if (310 <= totalScore && totalScore <= 359) {
+                    tedoElement.innerHTML = '予備軍';
+                    tedoElement.style.color = '#e6bf00';
+                    comeElement.innerHTML = '依存1km前です。';
+                } else if (360 <= totalScore && totalScore <= 399) {
+                    tedoElement.innerHTML = '予備軍';
+                    tedoElement.style.color = '#e6bf00';
+                    comeElement.innerHTML = '依存寸前です。';
+                } else if (400 <= totalScore && totalScore <= 439) {
+                    tedoElement.innerHTML = '軽症';
+                    tedoElement.style.color = '#ff9933';
+                    comeElement.innerHTML = '依存しました。';
+                } else if (440 <= totalScore && totalScore <= 499) {
+                    tedoElement.innerHTML = '軽症';
+                    tedoElement.style.color = '#ff9933';
+                    comeElement.innerHTML = '典型的な依存症ですね。';
+                } else if (500 <= totalScore && totalScore <= 549) {
+                    tedoElement.innerHTML = '中等症';
+                    tedoElement.style.color = '#ff6600';
+                    comeElement.innerHTML = 'ここまで来ると……いやはや、もう危険ですよ。';
+                } else if (550 <= totalScore && totalScore <= 599) {
+                    tedoElement.innerHTML = '中等症';
+                    tedoElement.style.color = '#ff6600';
+                    comeElement.innerHTML = '依存以上ですね。限度を越えています。';
+                } else if (600 <= totalScore && totalScore <= 649) {
+                    tedoElement.innerHTML = '重症';
+                    tedoElement.style.color = '#65318e';
+                    comeElement.innerHTML = '貴方はWikipediaの管理者に立候補するべきです。';
+                } else if (650 <= totalScore && totalScore <= 699) {
+                    tedoElement.innerHTML = '重症';
+                    tedoElement.style.color = '#65318e';
+                    comeElement.innerHTML = 'ビューロクラットに立候補しましょう!!';
+                } else if (700 <= totalScore && totalScore <= 749) {
+                    tedoElement.innerHTML = '重症';
+                    tedoElement.style.color = '#65318e';
+                    comeElement.innerHTML = '是非ともスチュワードになろう!';
+                } else if (750 <= totalScore && totalScore <= 799) {
+                    tedoElement.innerHTML = '重体';
+                    tedoElement.style.color = '#65318e';
+                    comeElement.innerHTML = 'ここまでくると重体ですね。';
+                } else if (800 <= totalScore && totalScore <= 849) {
+                    tedoElement.innerHTML = '重体';
+                    tedoElement.style.color = '#65318e';
+                    comeElement.innerHTML = '貴方はWikipediaを制覇しました。';
+                } else if (850 <= totalScore && totalScore <= 929) {
+                    tedoElement.innerHTML = '重篤';
+                    tedoElement.style.color = '#460e44';
+                    comeElement.innerHTML = 'Wikipediaが使えない日があるとセンチメンタルになります。';
+                } else if (930 <= totalScore && totalScore <= 969) {
+                    tedoElement.innerHTML = '重篤';
+                    tedoElement.style.color = '#460e44';
+                    comeElement.innerHTML = '半日以上ウィキペディアを使えないとセンチメンタルになります。';
+                } else if (970 <= totalScore && totalScore <= 999) {
+                    tedoElement.innerHTML = '禁断症状';
+                    comeElement.innerHTML = 'ウィキペディアがないと禁断症状が現れます。社会復帰は諦めましょう。';
+                } else if (1000 <= totalScore && totalScore <= 1499) {
+                    tedoElement.innerHTML = '禁断症状';
+                    comeElement.innerHTML = 'ウィキペディアから目を離した途端に何かの発作が起きるでしょう。';
+                } else if (1500 <= totalScore) {
+                    tedoElement.innerHTML = '禁断症状';
+                    comeElement.innerHTML = 'もはや、ウィキペディアなしに生きられません。あなたは、ウィキペディアから目を離したら死ぬでしょう。';
+                } else {
+                    tedoElement.innerHTML = 'エラーまたは診断対象外です。';
+                }
+
+
             }
 
-
-}
-
-</script>
-</main>
+        </script>
+    </main>
 </body>
+
 </html>
