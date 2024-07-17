@@ -28,6 +28,7 @@
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
+            text-align: center;
         }
         .codein {
             display: flex;
@@ -129,6 +130,7 @@
             <div id="score" style="font-size: 150%;"></div>
             <div id="tedo" style="font-size: 150%; font-weight:bold;"></div>
             <div id="come"></div>
+            <button id="shusei">回答の修正</button>
         </div>
         <div id="quizTable"></div>
 
@@ -510,6 +512,11 @@
                     newUrl += `&USER=${encodeURIComponent(userParam)}`;
                 }
                 window.location.href = newUrl;
+            };
+            document.getElementById('shusei').onclick = function () {
+                const inputBoxValue = document.getElementById('inputBox').value;
+                var shuse = "./shusei.html?kaito=" + inputBoxValue;
+                window.location.href = shuse;
             };
         </script>
     </main>
