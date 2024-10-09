@@ -5,6 +5,9 @@ var CacheURL = [
     "../menu.js",
     "../logo.png"
 ];
+const CACHE_KEYS = [
+  CACHEID
+];
 
 self.addEventListener('install', function(event) {
     event.waitUntil(
