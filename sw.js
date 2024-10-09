@@ -1,8 +1,8 @@
 var CACHEID  = "m1.0.0-jawpctest1.0.0";
 var CacheURL = [
     "./index.html",
-    "./favicon.ico",
-    "./menu.js",
+    "../favicon.ico",
+    "../menu.js",
     "../logo.png"
 ];
 
