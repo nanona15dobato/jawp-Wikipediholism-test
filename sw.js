@@ -1,9 +1,9 @@
 var CACHEID  = "m1.0.0-jawpctest1.0.0";
 var CacheURL = [
-    "index.html",
-    "favicon.ico",
-    "menu.js",
-    "https://nanona15dobato.github.io/logo.png"
+    "./index.html",
+    "./favicon.ico",
+    "./menu.js",
+    "..//logo.png"
 ];
 
 self.addEventListener('install', function(event) {
