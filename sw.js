@@ -3,12 +3,6 @@ var CacheURL = [
     "index.html",
     "favicon.ico",
     "menu.js",
-    "https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1",
-    "https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1",
-    "https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1",
-    "https://upload.wikimedia.org/wikipedia/commons/5/5a/Wikipedia%27s_W.svg",
-    "https://upload.wikimedia.org/wikipedia/commons/2/24/Github_logo_svg.svg",
-    "https://upload.wikimedia.org/wikipedia/commons/5/57/X_logo_2023_%28white%29.png",
     "https://nanona15dobato.github.io/logo.png"
 ];
 
