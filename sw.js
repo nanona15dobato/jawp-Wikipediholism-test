@@ -3,7 +3,7 @@ var CacheURL = [
     "./index.html",
     "./favicon.ico",
     "./menu.js",
-    "..//logo.png"
+    "../logo.png"
 ];
 
 self.addEventListener('install', function(event) {
