@@ -43,7 +43,7 @@ self.addEventListener('fetch', function(event) {
               cloneResponse = response.clone();
               if(response){
                 if(response || response.status == 200){
-                  caches.open(CACHE_NAME)
+                  caches.open(CACHEID)
                     .then(function(cache)
                     {
                       cache.put(event.request, cloneResponse)
