@@ -203,7 +203,7 @@
             </p>
         </footer>
         <script>
-            console.log("ver 0.5.21");
+            console.log("ver 1.0.0");
             const qver = 1;
             const questions = [
                 { st1: 'あなたはウィキペディア中毒でしょうかテスト', text: '<small>自分の心の中に「もしかしたら私はウィキペディア中毒なのではないか？」との思いが芽生えてきたら、このテストを受けることを強くお勧めします。<br />それぞれの質問に「はい」と答えた場合のポイントの値は、質問の最後に括弧で囲んで表示されています。得点が高いほど、あなたがウィキペディア中毒であることを示しているということになります。</small>', score: 0, skip: 0, startcte: 1 },
@@ -404,7 +404,7 @@
                 if (question.st2) {
                     st2Element.innerHTML = question.st2;
                 } else {
-                    st2Element.innerHTML = "";
+                    st2Element.innerHTML = "　";
                 }
                 questionElement.innerHTML = question.text;
                 if (question.kaz) {
@@ -609,33 +609,15 @@
                 var question = questions[currentQuestionIndex];
                 if (question.kaz) {
                     var numberAnswer = parseInt(suji.value, 10);
+                    let kazScores = [0, kazk1, kazk2, kazk3, kazk4, kazk5, kazk6];
+                    let scoreMultipliers = [0, 10, 20, 10, 5, 15, 15];
 
-                    if (question.kaz == 1) {
-                        kazk1 += numberAnswer;
-                        totalScore += numberAnswer * 10;
-                        console.log(kazk1);
+                    if (question.kaz >= 1 && question.kaz <= 6) {
+                        kazScores[question.kaz] += numberAnswer;
+                        totalScore += numberAnswer * scoreMultipliers[question.kaz];
+                        console.log(kazScores[question.kaz]);
                     }
-                    if (question.kaz == 2) {
-                        kazk2 += numberAnswer;
-                        totalScore += numberAnswer * 20;
-                        console.log(kazk2);
-                    }
-                    if (question.kaz == 3) {
-                        kazk3 += numberAnswer;
-                        totalScore += numberAnswer * 10;
-                    }
-                    if (question.kaz == 4) {
-                        kazk4 += numberAnswer;
-                        totalScore += numberAnswer * 5;
-                    }
-                    if (question.kaz == 5) {
-                        kazk5 += numberAnswer;
-                        totalScore += numberAnswer * 15;
-                    }
-                    if (question.kaz == 6) {
-                        kazk6 += numberAnswer;
-                        totalScore += numberAnswer * 15;
-                    }
+                    
                     console.log(numberAnswer);
                     suji.value = '0';
                     currentQuestionIndex++;
