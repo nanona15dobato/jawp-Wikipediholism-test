@@ -11,7 +11,7 @@ self.addEventListener('install', function(event) {
         caches.open(CACHEID) 
           .then(
           function(cache){
-              return cache.addAll(CacheURL); 
+              return cache.addAll(CacheURL.map(url => new Request(url, {credentials: 'same-origin'}))); 
           })
     );
 });
