@@ -51,6 +51,7 @@
                 <div id="tedo" style="font-size: 150%; font-weight:bold"></div>
                 <div id="come"></div>
                 <div id="urlmypage"></div>
+                <div id="share"></div>
                 <button id="restartButton">最初からやり直す</button>
             </div>
             <br />
@@ -390,6 +391,7 @@
             const scoreElement = document.getElementById('score');
             const tedoElement = document.getElementById('tedo');
             const comeElement = document.getElementById('come');
+            const shareElement = document.getElementById('share');
             const restartButton = document.getElementById('restartButton');
             const suji = document.getElementById('suji');
             const progressBarFill = document.getElementById('progressBarFill');
@@ -576,6 +578,7 @@
                 } else {
                     tedoElement.innerHTML = 'エラーまたは診断対象外です。';
                 }
+                shareElement.innerHTML = `<p>結果をシェア:<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="large" data-text="この利用者のテスト結果は${totalScore}点で程度は「${tedoElement.innerHTML}」です。" data-url="https://nanona15dobato.github.io/jawp-Wikipediholism-test/" data-via="nanona15dobato" data-hashtags="jawpholictest" data-show-count="false">Tweet</a></p><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`
                 var ku1 = responses.join('').match(/.{1,50}/g);
                 var ku2 = ku1.map(ku1 => "1" + ku1).map(ku1 => parseInt(ku1, 2).toString(32));
                 var kekkaurl = ku2.join("Z")
