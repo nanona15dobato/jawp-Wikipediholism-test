@@ -1,6 +1,7 @@
 const CACHE_NAME = "jawpctest2.0.0-q2-a2";
 var URLS_TO_CACHE = [
   "./",
+  "./?pwa=1",
   "./index.html",
   "./shusei.html",
   "./kaito.html",
