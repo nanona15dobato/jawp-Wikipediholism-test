@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@nanona15dobato" />
+    <meta name="twitter:title" content="あなたはウィキペディア中毒でしょうかテスト採点サイト" />
+    <meta name="twitter:description" content="Y/NだけでWP中毒かどうか自動採点します。" />
+    <meta name="twitter:image" content="https://nanona15dobato.github.io/img/jawpctest/TwitterX.png" />
+    <link rel="manifest" href="./manifest.json">
+    <title>あなたはウィキペディア中毒でしょうかテスト採点サイト</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LR9X0D2DJJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-LR9X0D2DJJ');
+
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register('./sw.js')
+        }
+    </script>
+</head>
+
+<body onLoad="inmenu();">
+    <script type="text/javascript" src="../menu.js"></script>
+    <div id="menu"></div>
+    <main>
+        <div class="container">
+            <div id="currentScore" class="currentScore">現在の点数: 0</div>
+            <div id="quiz">
+                <div class="st1e" id="st1e"></div>
+                <div class="st2e" id="st2e"></div>
+                <div class="question" id="question"></div>
+                <div class="buttons">
+                    <button id="yesButton">はい (Y)</button>
+                    <button id="noButton">いいえ (N)</button>
+                    <button id="startButton">開始 (Y)</button>
+                </div>
+                <div class="numberInputContainer" id="numberInputContainer">
+                    <input type="number" id="suji" class="suji">
+                    <button id="nextButton">次へ(T)</button>
+                </div>
+                <button id="backButton">戻る (B)</button>
+            </div>
+            <div id="result" class="result" style="display:none;">
+                <div id="score" style="font-size: 150%"></div>
+                <div id="tedo" style="font-size: 150%; font-weight:bold"></div>
+                <div id="come"></div>
+                <div id="urlmypage"></div>
+                <div id="share"></div>
+                <button id="restartButton">最初からやり直す</button>
+            </div>
+            <br />
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressBarFill">0%</div>
+            </div>
+        </div>
+        <footer>
+            <!-- バージョン確認 -->
+            <p class="CC">このページは<span id="License">ウィキペディア日本語版<a
+                        href=\"https://ja.wikipedia.org/wiki/Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88\"
+                        target=\"_blank\">Wikipedia:あなたはウィキペディア中毒でしょうかテスト</a>の<a
+                        href=\"https://ja.wikipedia.org/w/index.php?title=Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88&oldid=106501361\"
+                        target=\"_blank\">2025年9月17日 (水) 10:50(UTC)の版</a></span>をもとに作成しています。<wbr>
+            <p xmlns:cc="http://creativecommons.org/ns#">This work by <span
+                    property="cc:attributionName">なノな15どバと</span> is licensed under <a
+                    href="https://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank"
+                    rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img
+                        style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                        src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img
+                        style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                        src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img
+                        style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
+                        src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
+            </p>
+        </footer>
+        <style>
+            html {
+                touch-action: manipulation;
+            }
+
+            main {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                margin: 0;
+                background-color: #f0f0f0;
+                position: relative;
+                padding-bottom: 120px;
+                box-sizing: border-box;
+            }
+
+            .container {
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                width: 90%;
+                max-width: 800px;
+            }
+
+            .question {
+                font-size: 1.2em;
+                margin-bottom: 20px;
+                line-height: 1.5;
+            }
+
+            .st1e {
+                margin: 0 auto;
+                text-align: center;
+                font-weight: bold;
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
+
+            .st2e {
+                margin: 0 auto;
+                text-align: center;
+                font-weight: bold;
+                font-size: 1.3em;
+                margin-bottom: 15px;
+                min-height: 1.3em;
+            }
+
+            .buttons {
+                display: flex;
+                justify-content: space-around;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            button {
+                padding: 15px 30px;
+                font-size: 1.1em;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                margin: 5px;
+                background-color: #e0e0e0;
+                transition: background-color 0.2s;
+                touch-action: manipulation;
+            }
+
+            button:active {
+                background-color: #ccc;
+            }
+
+            button:hover {
+                background-color: #d0d0d0;
+            }
+
+            #yesButton {
+                background-color: #d4edda;
+                color: #155724;
+            }
+
+            #noButton {
+                background-color: #f8d7da;
+                color: #721c24;
+            }
+
+            #startButton {
+                background-color: #cce5ff;
+                color: #004085;
+                font-weight: bold;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .selected {
+                background-color: #aaffaa;
+            }
+
+            .result {
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .result button {
+                background-color: #ffaaaa;
+                margin-top: 20px;
+            }
+
+            .numberInputContainer {
+                display: none;
+                justify-content: center;
+                align-items: center;
+                margin-top: 20px;
+                gap: 10px;
+            }
+
+            .suji {
+                padding: 10px;
+                font-size: 1.2em;
+                border: 2px solid #aaa;
+                border-radius: 5px;
+                width: 80px;
+                text-align: center;
+            }
+
+            .progress-bar {
+                width: 100%;
+                background-color: #f3f3f3;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                height: 20px;
+                margin-bottom: 20px;
+                margin-top: 20px;
+            }
+
+            .progress-bar-fill {
+                height: 100%;
+                background-color: #4caf50;
+                width: 0%;
+                border-radius: 5px;
+                text-align: center;
+                color: white;
+                line-height: 20px;
+                font-size: 0.8em;
+            }
+
+            .currentScore {
+                font-size: 1.2em;
+                margin-bottom: 10px;
+                text-align: right;
+                font-weight: bold;
+                color: #555;
+            }
+
+            footer {
+                position: absolute;
+                bottom: 0;
+                font-size: 0.7em;
+                width: 100%;
+                text-align: center;
+                padding: 10px 0;
+                background-color: #e9ecef;
+            }
+
+            @media (max-width: 600px) {
+                .container {
+                    width: 95%;
+                    padding: 15px;
+                }
+
+                button {
+                    width: 100%;
+                    margin: 5px 0;
+                    padding: 15px;
+                }
+
+                .buttons {
+                    flex-direction: column;
+                }
+
+                .st1e {
+                    font-size: 1.3em;
+                }
+
+                .st2e {
+                    font-size: 1.1em;
+                }
+            }
+        </style>
+        <script>
+            console.log("ver 1.2.0");//バージョン確認
+            window.defaultversion = 2; // バージョン確認（デフォルト）
+            const qver = window.defaultversion;//バージョン確認
+            let questions = [];
+            let answers = [];
+
+            let currentQuestionIndex = 0;
+            let totalScore = 0;
+            let responses = [];
+
+            const questionElement = document.getElementById('question');
+            const st1Element = document.getElementById('st1e');
+            const st2Element = document.getElementById('st2e');
+            const yesButton = document.getElementById('yesButton');
+            const noButton = document.getElementById('noButton');
+            const startButton = document.getElementById('startButton');
+            const nextButton = document.getElementById('nextButton');
+            const backButton = document.getElementById('backButton');
+            const resultElement = document.getElementById('result');
+            const scoreElement = document.getElementById('score');
+            const tedoElement = document.getElementById('tedo');
+            const comeElement = document.getElementById('come');
+            const shareElement = document.getElementById('share');
+            const restartButton = document.getElementById('restartButton');
+            const suji = document.getElementById('suji');
+            const progressBarFill = document.getElementById('progressBarFill');
+            const currentScoreElement = document.getElementById('currentScore');
+            const urlmypageElement = document.getElementById('urlmypage');
+            const numberInputContainer = document.getElementById('numberInputContainer');
+            const License = document.getElementById('License');
+
+            suji.value = '0';
+            let kazScores = []; // Array to store integer answers
+            let LicenseText = License.innerHTML;
+
+            // Fetch questions using qver
+            fetch(`./questions/${qver}.json`)
+                .then(response => response.json())
+                .then(data => {
+                    questions = data;
+                    // Initialize kazScores based on max 'kaz' index found or just dynamic
+                    // Find max kaz index to initialize array size if needed, or just push/set by index
+                    // Let's find max kaz index
+                    let maxKaz = 0;
+                    questions.forEach(q => {
+                        if (q.kaz && q.kaz > maxKaz) maxKaz = q.kaz;
+                    });
+                    kazScores = new Array(maxKaz + 1).fill(0);
+
+                    // Fetch answers
+                    let answerVersion = questions[0].answer_version || 1;
+                    if (questions[0].このJSONはこのページより作成しております) LicenseText = questions[0].このJSONはこのページより作成しております;
+
+                    fetch(`./answers/${answerVersion}.json`)
+                        .then(response => response.json())
+                        .then(answerData => {
+                            answers = answerData;
+                            if (answers[0].このJSONはこのページより作成しております) {
+                                if (LicenseText !== answers[0].このJSONはこのページより作成しております) {
+                                    LicenseText += " および " + answers[0].このJSONはこのページより作成しております;
+                                }
+                            }
+                            License.innerHTML = LicenseText;
+                            showQuestion(currentQuestionIndex);
+                        })
+                        .catch(error => {
+                            console.error('Error loading answers:', error);
+                            questionElement.innerHTML = '回答データの読み込みに失敗しました。';
+                            License.innerHTML = LicenseText;
+                        });
+                })
+                .catch(error => {
+                    console.error('Error loading questions:', error);
+                    questionElement.innerHTML = '質問データの読み込みに失敗しました。ページを再読み込みしてください。';
+                    License.innerHTML = LicenseText;
+                });
+
+            /*******************************************************
+             * ヘルパー関数: 任意の基数文字列を BigInt に変換
+             * (2〜36進数まで対応)
+             *******************************************************/
+            function bigIntFromBase(str, base) {
+                // 0-9 (10) + a-z (26) = 36進数まで対応
+                const alphabet = "0123456789abcdefghijklmnopqrstuvwxyz";
+                const baseN = BigInt(base);
+                let result = 0n; // BigIntのゼロ
+
+                if (base < 2 || base > 36) {
+                    throw new Error("基数は2から36の間で指定してください。");
+                }
+
+                // 文字列を一文字ずつ処理
+                for (const char of str.toLowerCase()) {
+                    const value = alphabet.indexOf(char);
+
+                    // アルファベットにない文字か、基数を超える文字が使われた場合
+                    if (value === -1 || value >= base) {
+                        throw new Error(`無効な${base}進数の文字です: ${char}`);
+                    }
+
+                    result = result * baseN + BigInt(value);
+                }
+                return result;
+            }
+
+            function showQuestion(index) {
+                if (!questions || questions.length === 0) return;
+
+                const question = questions[index];
+                st1Element.innerHTML = question.st1;
+                if (question.st2) {
+                    st2Element.innerHTML = question.st2;
+                } else {
+                    st2Element.innerHTML = "　";
+                }
+                questionElement.innerHTML = question.text;
+                if (question.kaz) {
+                    yesButton.style.display = 'none';
+                    noButton.style.display = 'none';
+                    numberInputContainer.style.display = 'flex';
+                    startButton.style.display = 'none';
+                } else if (question.startcte) {
+                    yesButton.style.display = 'none';
+                    noButton.style.display = 'none';
+                    numberInputContainer.style.display = 'none';
+                    startButton.style.display = 'inline-block';
+                    currentScoreElement.style.display = 'inline-block';
+                } else {
+                    yesButton.style.display = 'inline-block';
+                    noButton.style.display = 'inline-block';
+                    numberInputContainer.style.display = 'none';
+                    startButton.style.display = 'none';
+                }
+                updateProgressBar(index);
+                updateCurrentScore();
+            }
+
+            function updateProgressBar(index) {
+                const percentage = Math.round((index / questions.length) * 100);
+                progressBarFill.style.width = `${percentage}%`;
+                progressBarFill.textContent = `${percentage}%`;
+            }
+
+            function updateCurrentScore() {
+                currentScoreElement.innerText = `現在の点数: ${totalScore}`;
+            }
+
+            function handleAnswer(answer) {
+                var question = questions[currentQuestionIndex];
+                if (!question.kaz) {
+                    responses.push(answer ? 1 : 0);
+                    if (answer) {
+                        totalScore += question.score;
+                    } else {
+                        totalScore += 0;
+                    }
+
+                    if (!answer && question.skip > 0) {
+                        currentQuestionIndex += question.skip;
+                        [...Array(question.skip)].forEach(() => responses.push(0));
+                    }
+
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        showQuestion(currentQuestionIndex);
+                    } else {
+                        showResult();
+                    }
+                    console.log(responses);
+                }
+            }
+
+            function showResult() {
+                document.getElementById('quiz').style.display = 'none';
+                currentScoreElement.style.display = 'none';
+                resultElement.style.display = 'block';
+                progressBarFill.style.width = `100%`;
+                progressBarFill.textContent = `100%`;
+
+                scoreElement.innerHTML = `合計点: ${totalScore}<br>`;
+
+                let resultFound = false;
+                for (let ans of answers) {
+                    if (ans.max !== undefined) {
+                        if (ans.min <= totalScore && totalScore <= ans.max) {
+                            tedoElement.innerHTML = ans.tedo;
+                            if (ans.color) tedoElement.style.color = ans.color;
+                            comeElement.innerHTML = ans.come;
+                            resultFound = true;
+                            break;
+                        }
+                    } else {
+                        // Open-ended range (e.g., 1500 <= totalScore)
+                        if (ans.min <= totalScore) {
+                            tedoElement.innerHTML = ans.tedo;
+                            if (ans.color) tedoElement.style.color = ans.color;
+                            comeElement.innerHTML = ans.come;
+                            resultFound = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (!resultFound) {
+                    tedoElement.innerHTML = 'エラーまたは診断対象外です。';
+                }
+
+                var tedo = tedoElement.innerHTML;
+                shareElement.innerHTML = `<p>結果をシェア:<a href="https://x.com/intent/post?hashtags=jawpholictest&original_referer=https%3A%2F%2Fnanona15dobato.github.io%2F&text=%E3%81%93%E3%81%AE%E5%88%A9%E7%94%A8%E8%80%85%E3%81%AF%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88%E6%8E%A1%E7%82%B9%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E4%BD%BF%E7%94%A8%E3%81%97%E3%81%A6%E6%8E%A1%E7%82%B9%E3%81%97%E3%81%BE%E3%81%97%E3%81%9F%E3%80%82%E3%81%93%E3%81%AE%E5%88%A9%E7%94%A8%E8%80%85%E3%81%AE%E3%83%86%E3%82%B9%E3%83%88%E7%B5%90%E6%9E%9C%E3%81%AF${totalScore}%E7%82%B9%E3%81%A7%E7%A8%8B%E5%BA%A6%E3%81%AF%E3%80%8C${tedo}%E3%80%8D%E3%81%A7%E3%81%99%E3%80%82&url=https%3A%2F%2Fnanona15dobato.github.io%2Fjawp-Wikipediholism-test%2F" target="_blank">Xにポスト</a></p>`;
+                console.log(responses.join(''));
+
+                var kekkaurl = BigInt("0b" + "1" + responses.join('')).toString(32);
+                var date = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+                var jstNow = date.getFullYear() + '/' + ('0' + (date.getMonth() + 1)).slice(-2) + '/' + ('0' + date.getDate()).slice(-2) + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2) + '(<!--たぶん-->JST)';
+                console.log(totalScore);
+                console.log(responses);
+                console.log(kekkaurl);
+                console.log(jstNow);
+
+                console.log(kazScores.slice(1).join('A'));
+
+                let compressedKaz = bigIntFromBase("1" + kazScores.slice(1).join('A'), 11).toString(32);
+
+                var kekkacode = qver + "Y" + kekkaurl + "Y" + compressedKaz;
+                var url = `https://ja.wikipedia.org/w/index.php?action=edit&title=%E7%89%B9%E5%88%A5:%E5%88%A9%E7%94%A8%E8%80%85%E3%83%9A%E3%83%BC%E3%82%B8/%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88&preload=%E5%88%A9%E7%94%A8%E8%80%85:nanona15dobato/%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88/preload&preloadtitle=${jstNow}%E6%99%82%E7%82%B9%E3%81%A7%E3%81%AE%E7%B5%90%E6%9E%9C&section=new&editintro=%E5%88%A9%E7%94%A8%E8%80%85:nanona15dobato/%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88/editintro&preloadparams%5b%5d=${totalScore}&preloadparams%5b%5d=${kekkacode}&preloadparams%5b%5d=${qver}`;
+                var shuse = "./shusei.html?kaito=" + kekkacode;
+                urlmypageElement.innerHTML = `<a href="${url}" target="_blank">利用者ページに結果ページ作成</a><br /><a href="${shuse}" target="_blank">回答の修正をする。</a>`;
+            }
+
+            yesButton.addEventListener('click', () => {
+                handleAnswer(true);
+            });
+
+            noButton.addEventListener('click', () => {
+                handleAnswer(false);
+            });
+
+            startButton.addEventListener('click', () => {
+                var question = questions[currentQuestionIndex];
+                responses.push(1);
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    showQuestion(currentQuestionIndex);
+                } else {
+                    showResult();
+                }
+            });
+
+            nextButton.addEventListener('click', () => {
+                var question = questions[currentQuestionIndex];
+                if (question.kaz) {
+                    var numberAnswer = parseInt(suji.value, 10);
+
+                    if (question.kaz >= 1) {
+                        kazScores[question.kaz] = numberAnswer;
+                        totalScore += numberAnswer * (question.tk || 0);
+                        console.log(kazScores[question.kaz]);
+                    }
+
+                    console.log(numberAnswer);
+                    suji.value = '0';
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < questions.length) {
+                        showQuestion(currentQuestionIndex);
+                    } else {
+                        showResult();
+                    }
+                }
+            });
+
+            document.addEventListener('keydown', (event) => {
+                var question = questions[currentQuestionIndex];
+                if (event.key === 'y' || event.key === 'Y') {
+                    if (question.startcte) {
+                        startButton.click();
+                    } else {
+                        yesButton.click();
+                    }
+                } else if (event.key === 'n' || event.key === 'N') {
+                    // Disable N key for start question
+                    if (!question.startcte) {
+                        noButton.click();
+                    }
+                } else if (event.key === 't' || event.key === 'T') {
+                    nextButton.click();
+                } else if (event.key === 'b' || event.key === 'B') {
+                    backButton.click();
+                }
+            });
+
+            restartButton.addEventListener('click', () => {
+                currentQuestionIndex = 0;
+                totalScore = 0;
+                responses = [];
+                // Reset kazScores
+                let maxKaz = 0;
+                questions.forEach(q => {
+                    if (q.kaz && q.kaz > maxKaz) maxKaz = q.kaz;
+                });
+                kazScores = new Array(maxKaz + 1).fill(0);
+
+                resultElement.style.display = 'none';
+                document.getElementById('quiz').style.display = 'block';
+                showQuestion(currentQuestionIndex);
+            });
+
+            backButton.addEventListener('click', () => {
+                if (currentQuestionIndex > 0) {
+                    currentQuestionIndex--;
+                    var lastanswer = responses.slice(-1)[0];
+                    var question = questions[currentQuestionIndex];
+
+
+                    if (question.kaz) {
+                        if (kazScores[question.kaz] !== undefined) {
+                            totalScore -= (kazScores[question.kaz] * (question.tk || 0));
+                            kazScores[question.kaz] = 0;
+                        }
+                    } else {
+
+                        if (lastanswer > 0) {
+                            totalScore -= question.score;
+                        }
+                        responses.pop();
+                    }
+
+                    showQuestion(currentQuestionIndex);
+                }
+                console.log(responses);
+            });
+        </script>
+
+    </main>
+</body>
+
+</html>
