@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-nn-site="github">
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <meta name="twitter:site" content="@nanona15dobato" />
     <meta name="twitter:title" content="あなたはウィキペディア中毒でしょうかテスト採点サイト" />
     <meta name="twitter:description" content="Y/NだけでWP中毒かどうか自動採点します。" />
-    <meta name="twitter:image" content="https://nanona15dobato.github.io/img/jawpctest/TwitterX.png" />
+    <meta name="twitter:image" content="https://github.nanona.me/jawp-Wikipediholism-test/assets/img/ogp.png" />
     <link rel="manifest" href="./manifest.json">
     <title>あなたはウィキペディア中毒でしょうかテスト採点サイト</title>
     <!-- Google tag (gtag.js) -->
@@ -23,12 +23,16 @@
             navigator.serviceWorker.register('./sw.js')
         }
     </script>
+    <link rel="icon" href="/favicon.ico">
+    <!-- nn:head -->
+    <link rel="stylesheet" href="./assets/quiz.css">
 </head>
 
-<body onLoad="inmenu();">
-    <script type="text/javascript" src="../menu.js"></script>
-    <div id="menu"></div>
-    <main>
+<body class="quiz-page">
+    <a class="nn-skip-link" href="#content">本文へ移動</a>
+    <!-- nn:header -->
+    <main id="content" class="nn-page">
+        <h1 class="nn-visually-hidden">あなたはウィキペディア中毒でしょうかテスト</h1>
         <div class="container">
             <div id="currentScore" class="currentScore">現在の点数: 0</div>
             <div id="quiz">
@@ -59,7 +63,8 @@
                 <div class="progress-bar-fill" id="progressBarFill">0%</div>
             </div>
         </div>
-        <footer>
+        <!-- nn:footer-note -->
+        <div class="quiz-license">
             <!-- バージョン確認 -->
             <p class="CC">このページは<span id="License">ウィキペディア日本語版<a
                         href=\"https://ja.wikipedia.org/wiki/Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88\"
@@ -77,198 +82,11 @@
                         style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
                         src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
             </p>
-        </footer>
-        <style>
-            html {
-                touch-action: manipulation;
-            }
-
-            main {
-                font-family: Arial, sans-serif;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                min-height: 100vh;
-                margin: 0;
-                background-color: #f0f0f0;
-                position: relative;
-                padding-bottom: 120px;
-                box-sizing: border-box;
-            }
-
-            .container {
-                background-color: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                width: 90%;
-                max-width: 800px;
-            }
-
-            .question {
-                font-size: 1.2em;
-                margin-bottom: 20px;
-                line-height: 1.5;
-            }
-
-            .st1e {
-                margin: 0 auto;
-                text-align: center;
-                font-weight: bold;
-                font-size: 1.5em;
-                margin-bottom: 10px;
-            }
-
-            .st2e {
-                margin: 0 auto;
-                text-align: center;
-                font-weight: bold;
-                font-size: 1.3em;
-                margin-bottom: 15px;
-                min-height: 1.3em;
-            }
-
-            .buttons {
-                display: flex;
-                justify-content: space-around;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            button {
-                padding: 15px 30px;
-                font-size: 1.1em;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                margin: 5px;
-                background-color: #e0e0e0;
-                transition: background-color 0.2s;
-                touch-action: manipulation;
-            }
-
-            button:active {
-                background-color: #ccc;
-            }
-
-            button:hover {
-                background-color: #d0d0d0;
-            }
-
-            #yesButton {
-                background-color: #d4edda;
-                color: #155724;
-            }
-
-            #noButton {
-                background-color: #f8d7da;
-                color: #721c24;
-            }
-
-            #startButton {
-                background-color: #cce5ff;
-                color: #004085;
-                font-weight: bold;
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .selected {
-                background-color: #aaffaa;
-            }
-
-            .result {
-                text-align: center;
-                margin-top: 20px;
-            }
-
-            .result button {
-                background-color: #ffaaaa;
-                margin-top: 20px;
-            }
-
-            .numberInputContainer {
-                display: none;
-                justify-content: center;
-                align-items: center;
-                margin-top: 20px;
-                gap: 10px;
-            }
-
-            .suji {
-                padding: 10px;
-                font-size: 1.2em;
-                border: 2px solid #aaa;
-                border-radius: 5px;
-                width: 80px;
-                text-align: center;
-            }
-
-            .progress-bar {
-                width: 100%;
-                background-color: #f3f3f3;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                height: 20px;
-                margin-bottom: 20px;
-                margin-top: 20px;
-            }
-
-            .progress-bar-fill {
-                height: 100%;
-                background-color: #4caf50;
-                width: 0%;
-                border-radius: 5px;
-                text-align: center;
-                color: white;
-                line-height: 20px;
-                font-size: 0.8em;
-            }
-
-            .currentScore {
-                font-size: 1.2em;
-                margin-bottom: 10px;
-                text-align: right;
-                font-weight: bold;
-                color: #555;
-            }
-
-            footer {
-                position: absolute;
-                bottom: 0;
-                font-size: 0.7em;
-                width: 100%;
-                text-align: center;
-                padding: 10px 0;
-                background-color: #e9ecef;
-            }
-
-            @media (max-width: 600px) {
-                .container {
-                    width: 95%;
-                    padding: 15px;
-                }
-
-                button {
-                    width: 100%;
-                    margin: 5px 0;
-                    padding: 15px;
-                }
-
-                .buttons {
-                    flex-direction: column;
-                }
-
-                .st1e {
-                    font-size: 1.3em;
-                }
-
-                .st2e {
-                    font-size: 1.1em;
-                }
-            }
-        </style>
+        </div>
+        <!-- /nn:footer-note -->
         <script>
+        // 出典表記（#License）は公開時にフッターへ移るので、ページ全体を読み終えてから動かす
+        document.addEventListener("DOMContentLoaded", () => {
             console.log("ver 1.2.0");//バージョン確認
             window.defaultversion = 2; // バージョン確認（デフォルト）
             const qver = window.defaultversion;//バージョン確認
@@ -305,7 +123,7 @@
             let LicenseText = License.innerHTML;
 
             // Fetch questions using qver
-            fetch(`./questions/${qver}.json`)
+            fetch(`./data/questions/${qver}.json`)
                 .then(response => response.json())
                 .then(data => {
                     questions = data;
@@ -322,7 +140,7 @@
                     let answerVersion = questions[0].answer_version || 1;
                     if (questions[0].このJSONはこのページより作成しております) LicenseText = questions[0].このJSONはこのページより作成しております;
 
-                    fetch(`./answers/${answerVersion}.json`)
+                    fetch(`./data/answers/${answerVersion}.json`)
                         .then(response => response.json())
                         .then(answerData => {
                             answers = answerData;
@@ -599,9 +417,11 @@
                 }
                 console.log(responses);
             });
+        });
         </script>
 
     </main>
+    <!-- nn:footer -->
 </body>
 
 </html>

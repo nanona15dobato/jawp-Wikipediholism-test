@@ -1,226 +1,20 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-nn-site="github">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wikipedia中毒回答修正</title>
-    <style>
-        main {
-            font-family: 'Arial', sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-        }
-
-        .kek,
-        .codein {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .codein {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-        }
-
-
-        #score,
-        #tedo,
-        #come {
-            text-align: center;
-            margin: 10px 0;
-        }
-
-        #tedo {
-            font-size: 1.8em;
-        }
-
-        #come {
-            font-size: 1.2em;
-            color: #555;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        table th,
-        table td {
-            border: 1px solid #ddd;
-            padding: 12px 8px;
-            text-align: left;
-        }
-
-        table th {
-            background-color: #f2f2f2;
-            color: #333;
-            font-weight: bold;
-        }
-
-        table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        table tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        a {
-            color: #3498db;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            min-width: 200px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1em;
-        }
-
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            background-color: #007BFF;
-            color: white;
-            cursor: pointer;
-            font-size: 1em;
-            touch-action: manipulation;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .popup {
-            display: none;
-            position: fixed;
-            z-index: 100;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
-        }
-
-        .popup-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        #popupInput {
-            margin: 20px 0;
-            font-size: 1.2em;
-        }
-
-        #popupInput label {
-            margin-right: 20px;
-            display: inline-block;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-        }
-
-        #popupNumberInput {
-            padding: 10px;
-            font-size: 1.2em;
-            width: 100px;
-        }
-
-        @media (max-width: 600px) {
-            main {
-                padding: 10px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            table th,
-            table td {
-                padding: 8px 4px;
-                font-size: 0.9em;
-            }
-
-            /* Hide less important columns on small screens if needed, 
-               or make table scrollable */
-            .table-container {
-                overflow-x: auto;
-            }
-
-            .codein {
-                flex-direction: column;
-            }
-
-            input[type="text"] {
-                width: 100%;
-                box-sizing: border-box;
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
-
-            button {
-                width: 100%;
-            }
-        }
-    </style>
+  <link rel="icon" href="/favicon.ico">
+  <!-- nn:head -->
+  <link rel="stylesheet" href="./assets/quiz.css">
 </head>
 
-<body onLoad="inmenu();">
-    <script type="text/javascript" src="../menu.js"></script>
-    <div id="menu"></div>
-    <main>
-        <h1>あなたはウィキペディア中毒でしょうかテスト回答修正ページ</h1>
-        <br />
+<body>
+    <a class="nn-skip-link" href="#content">本文へ移動</a>
+    <!-- nn:header -->
+    <main id="content" class="nn-page">
+        <h1 class="quiz-title">あなたはウィキペディア中毒でしょうかテスト回答修正ページ</h1>
         <div class="codein">
             <input type="text" id="inputBox" placeholder="回答コードを入力">
             <button id="hyojib">表示</button>
@@ -243,7 +37,8 @@
             </div>
         </div>
 
-        <footer>
+        <!-- nn:footer-note -->
+        <div class="quiz-license">
             <!-- バージョン確認 -->
             <p class="CC">このページは<span id="License">ウィキペディア日本語版<a
                         href=\"https://ja.wikipedia.org/wiki/Wikipedia:%E3%81%82%E3%81%AA%E3%81%9F%E3%81%AF%E3%82%A6%E3%82%A3%E3%82%AD%E3%83%9A%E3%83%87%E3%82%A3%E3%82%A2%E4%B8%AD%E6%AF%92%E3%81%A7%E3%81%97%E3%82%87%E3%81%86%E3%81%8B%E3%83%86%E3%82%B9%E3%83%88\"
@@ -261,7 +56,8 @@
                         style="height:22px!important;margin-left:3px;vertical-align:text-bottom;"
                         src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt=""></a></p>
             </p>
-        </footer>
+        </div>
+        <!-- /nn:footer-note -->
         <script>
             console.log("ver 1.2.0");//バージョン確認
             window.defaultversion = 2; // バージョン確認（デフォルト）
@@ -332,16 +128,21 @@
                     compressedKaz: ku2
                 };
             }
-            const License = document.getElementById("License");
-            let LicenseText = License.innerHTML;
+            // 出典表記（#License）は公開時にフッターへ移り、このスクリプトより後ろになるので、読み終えてから取得する
+            let License = null;
+            let LicenseText = "";
+            document.addEventListener("DOMContentLoaded", () => {
+              License = document.getElementById("License");
+              if (License) LicenseText = License.innerHTML;
+            });
             function loadQuestions(version) {
-                fetch(`./questions/${version}.json`)
+                fetch(`./data/questions/${version}.json`)
                     .then(response => response.json())
                     .then(data => {// Fetch answers
                         let answerVersion = data[0].answer_version || window.defaultversion;
                         if (data[0].このJSONはこのページより作成しております) LicenseText = data[0].このJSONはこのページより作成しております;
 
-                        fetch(`./answers/${answerVersion}.json`)
+                        fetch(`./data/answers/${answerVersion}.json`)
                             .then(response => response.json())
                             .then(answerData => {
                                 if (answerData[0].このJSONはこのページより作成しております) {
@@ -583,6 +384,7 @@
             }
         </script>
     </main>
+    <!-- nn:footer -->
 </body>
 
 </html>

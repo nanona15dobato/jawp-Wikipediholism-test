@@ -1,0 +1,7 @@
+{
+  "extends": "https://raw.githubusercontent.com/nanona15dobato/nanona15dobato.github.io/main/nanona.site.json",
+  "basePath": "/jawp-Wikipediholism-test/",
+  "siteUrl": "https://github.nanona.me/jawp-Wikipediholism-test/",
+  "sitemapExclude": ["offline.html", "old"],
+  "exclude": ["README.md"]
+}

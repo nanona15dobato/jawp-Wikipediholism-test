@@ -1,0 +1,45 @@
+# nanona-ui を差し込んで GitHub Pages に公開する。
+# 各リポジトリの .github/workflows/pages.yml に写して使う（元は nanona-ui の templates/pages-workflow.yml）。
+# リポジトリの Settings → Pages → Source を「GitHub Actions」にしておくこと。
+# nanona-ui のヘッダー・フッターを更新したときは、Actions タブからこのワークフローを手動実行すれば反映される。
+name: GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # ui.nanona.me は Cloudflare の Bot Fight Mode で CI からの取得が止まるので、Pages の元アドレスから取得する
+      # （ページに書かれる CSS・JS の参照先は ui.nanona.me のまま）
+      - name: nanona-ui を差し込む
+        run: node scripts/nn-pages.mjs --ui https://nanona-ui.pages.dev/v1
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

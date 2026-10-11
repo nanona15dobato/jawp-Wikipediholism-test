@@ -1,0 +1,432 @@
+/*
+ * あなたはウィキペディア中毒でしょうかテスト：採点・回答確認・回答修正ページ共通のスタイル。
+ * 色・余白・文字は nanona-ui のトークン（var(--nn-*)）だけを使う。
+ */
+
+html {
+  touch-action: manipulation;
+}
+
+.quiz-title {
+  margin-bottom: var(--nn-space-6);
+}
+
+/* ---------- ボタン（nanona-ui のボタンと同じ見た目） ---------- */
+
+main button {
+  min-height: 2.75rem;
+  padding: 0 var(--nn-space-6);
+  border: var(--nn-border-width) solid var(--nn-border);
+  border-radius: var(--nn-radius);
+  background: var(--nn-bg-subtle);
+  color: var(--nn-text);
+  font-size: var(--nn-font-size-m);
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color var(--nn-transition), border-color var(--nn-transition);
+}
+main button:hover {
+  background: var(--nn-bg);
+}
+main button:active {
+  background: var(--nn-bg-muted);
+}
+
+/* 主な操作は青 */
+#startButton,
+#nextButton,
+#hyojib,
+#submitPopup,
+#JAWPmake,
+#restartButton {
+  border-color: var(--nn-link);
+  background: var(--nn-link);
+  color: var(--nn-text-inverted);
+}
+#startButton:hover,
+#nextButton:hover,
+#hyojib:hover,
+#submitPopup:hover,
+#JAWPmake:hover,
+#restartButton:hover {
+  border-color: var(--nn-link-hover);
+  background: var(--nn-link-hover);
+}
+
+/* はい／いいえ は状態色の枠で区別（文字も入っているので色だけに頼らない） */
+#yesButton {
+  border-color: var(--nn-success);
+  background: var(--nn-success-subtle);
+  color: var(--nn-success);
+}
+#noButton {
+  border-color: var(--nn-error);
+  background: var(--nn-error-subtle);
+  color: var(--nn-error);
+}
+#yesButton:hover,
+#noButton:hover {
+  background: var(--nn-bg);
+}
+
+#backButton {
+  border-color: transparent;
+  background: transparent;
+  color: var(--nn-text-subtle);
+  font-weight: 400;
+}
+#backButton:hover {
+  background: var(--nn-bg-subtle);
+}
+
+main input[type="text"],
+main input[type="number"] {
+  min-height: 2.75rem;
+  padding: var(--nn-space-2) var(--nn-space-3);
+  border: var(--nn-border-width) solid var(--nn-border);
+  border-radius: var(--nn-radius);
+  background: var(--nn-bg);
+  color: var(--nn-text);
+  font-size: var(--nn-font-size-m);
+}
+main input:focus {
+  border-color: var(--nn-focus);
+  outline: 1px solid var(--nn-focus);
+}
+
+/* ---------- 採点ページ ---------- */
+
+.container {
+  padding: var(--nn-space-6);
+  border: var(--nn-border-width) solid var(--nn-border-subtle);
+  border-radius: var(--nn-radius-card);
+  background: var(--nn-bg);
+}
+
+.currentScore {
+  margin-bottom: var(--nn-space-2);
+  color: var(--nn-text-subtle);
+  font-size: var(--nn-font-size-s);
+  font-weight: 700;
+  text-align: right;
+}
+
+.st1e {
+  margin-bottom: var(--nn-space-1);
+  font-size: var(--nn-font-size-xl);
+  font-weight: 700;
+  text-align: center;
+}
+.st2e {
+  min-height: 1.5em;
+  margin-bottom: var(--nn-space-4);
+  color: var(--nn-text-subtle);
+  font-size: var(--nn-font-size-l);
+  font-weight: 700;
+  text-align: center;
+}
+
+.question {
+  margin-bottom: var(--nn-space-6);
+  padding: var(--nn-space-4);
+  border-left: 4px solid var(--nn-sky);
+  background: var(--nn-sky-subtle);
+  font-size: var(--nn-font-size-l);
+  line-height: 1.7;
+}
+
+/* はい／いいえ は大きく横並び（スマホでも親指で押しやすいように） */
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--nn-space-3);
+}
+.buttons button {
+  min-height: 4.5rem;
+  padding: var(--nn-space-2);
+  font-size: var(--nn-font-size-xl);
+}
+#startButton {
+  grid-column: 1 / -1;
+  min-height: 3.5rem;
+  font-size: var(--nn-font-size-l);
+}
+
+.numberInputContainer {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nn-space-2);
+  margin-top: var(--nn-space-4);
+}
+.numberInputContainer input,
+.numberInputContainer button {
+  min-height: 3.5rem;
+  font-size: var(--nn-font-size-l);
+}
+.suji {
+  width: 7rem;
+  text-align: center;
+}
+
+#backButton {
+  display: block;
+  margin: var(--nn-space-4) auto 0;
+}
+
+.result {
+  margin-top: var(--nn-space-4);
+  text-align: center;
+}
+.result button {
+  margin-top: var(--nn-space-6);
+}
+
+/* 進み具合 */
+.progress-bar {
+  height: 0.5rem;
+  margin-top: var(--nn-space-6);
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--nn-bg-muted);
+}
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--nn-sky);
+  color: transparent; /* 「n%」の文字は帯が細いので隠す（読み上げはされる） */
+  font-size: 0;
+  transition: width 0.3s ease;
+}
+
+/* ---------- 回答確認・回答修正ページ ---------- */
+
+.codein {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--nn-space-2);
+  margin-bottom: var(--nn-space-6);
+}
+.codein input[type="text"] {
+  flex: 1 1 16rem;
+  max-width: 28rem;
+}
+
+.kek {
+  margin-bottom: var(--nn-space-6);
+  padding: var(--nn-space-6);
+  border: var(--nn-border-width) solid var(--nn-border-subtle);
+  border-radius: var(--nn-radius-card);
+  text-align: center;
+}
+#usern {
+  margin-bottom: var(--nn-space-2);
+  font-size: var(--nn-font-size-xl);
+  font-weight: 700;
+}
+#score,
+#tedo,
+#come {
+  margin: var(--nn-space-2) 0;
+}
+#come {
+  color: var(--nn-text-subtle);
+}
+
+.table-container {
+  overflow-x: auto;
+}
+.table-container table {
+  width: 100%;
+  font-size: var(--nn-font-size-s);
+  line-height: 1.5;
+}
+.table-container th,
+.table-container td {
+  padding: var(--nn-space-2);
+  border: var(--nn-border-width) solid var(--nn-border-subtle);
+}
+.table-container tbody tr:hover {
+  background: var(--nn-bg-subtle);
+}
+
+/* 回答修正のポップアップ */
+.popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: auto;
+  padding: var(--nn-space-12) var(--nn-space-4);
+  background: rgb(0 0 0 / 0.4); /* 下の画面を暗くする幕。テーマによらず同じ */
+}
+.popup-content {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: var(--nn-space-6);
+  border: var(--nn-border-width) solid var(--nn-border-subtle);
+  border-radius: var(--nn-radius-card);
+  background: var(--nn-bg);
+  box-shadow: var(--nn-shadow-popup);
+}
+.close {
+  float: right;
+  color: var(--nn-text-subtle);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.close:hover,
+.close:focus {
+  color: var(--nn-text);
+}
+#popupInput {
+  margin: var(--nn-space-4) 0;
+}
+#popupInput label {
+  display: inline-block;
+  margin: 0 var(--nn-space-2) var(--nn-space-2) 0;
+  padding: var(--nn-space-2) var(--nn-space-3);
+  border: var(--nn-border-width) solid var(--nn-border-subtle);
+  border-radius: var(--nn-radius);
+  background: var(--nn-bg-subtle);
+  cursor: pointer;
+}
+#popupNumberInput {
+  width: 6rem;
+}
+
+/* ---------- 出典・ライセンス表記（公開時に共通フッターの上段へ移る） ---------- */
+
+.quiz-license p {
+  margin: 0 0 var(--nn-space-2);
+}
+.quiz-license img {
+  height: 1.25em !important;
+  margin-left: 0.2em;
+  vertical-align: text-bottom;
+}
+
+/* ---------- 採点ページ：ヘッダーと合わせてスクロールなしの 1 画面に収める ---------- */
+/* ヘッダーの高さを固定し、残りの高さを採点の枠に使う。フッターはその下（スクロールすると見える） */
+
+.quiz-page {
+  --quiz-header: 3.5rem;
+}
+.quiz-page .nn-header__inner {
+  height: var(--quiz-header);
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.quiz-page main.nn-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--quiz-header) - var(--nn-border-width));
+  height: calc(100dvh - var(--quiz-header) - var(--nn-border-width));
+  padding-top: var(--nn-space-3);
+  padding-bottom: var(--nn-space-3);
+}
+.quiz-page .container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: var(--nn-space-4);
+}
+.quiz-page .container > br {
+  display: none;
+}
+/* 進み具合は一番上に */
+.quiz-page .progress-bar {
+  order: -1;
+  flex-shrink: 0;
+  margin: 0 0 var(--nn-space-2);
+}
+.quiz-page #quiz,
+.quiz-page .result {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+.quiz-page .result {
+  overflow-y: auto;
+  justify-content: center;
+}
+.quiz-page .st1e {
+  font-size: var(--nn-font-size-l);
+}
+.quiz-page .st2e {
+  min-height: 1.4em;
+  margin-bottom: var(--nn-space-2);
+  font-size: var(--nn-font-size-m);
+}
+/* 質問文が長いときは、この欄の中だけスクロールする */
+.quiz-page .question {
+  flex: 1 1 auto;
+  min-height: 4rem;
+  margin-bottom: var(--nn-space-3);
+  overflow-y: auto;
+}
+/* ボタンは下に寄せる（親指の届く位置） */
+.quiz-page .buttons,
+.quiz-page .numberInputContainer {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+.quiz-page #backButton {
+  flex-shrink: 0;
+  min-height: 2.75rem;
+  margin-top: var(--nn-space-2);
+}
+
+/* 低い画面（横向きのスマホなど）では余白と文字を詰める */
+@media (max-height: 36rem) {
+  .quiz-page main.nn-page {
+    padding-top: var(--nn-space-1);
+    padding-bottom: var(--nn-space-1);
+  }
+  .quiz-page .container {
+    padding: var(--nn-space-2) var(--nn-space-3);
+  }
+  .quiz-page .currentScore {
+    margin-bottom: 0;
+  }
+  .quiz-page .question {
+    min-height: 2.5rem;
+    margin-bottom: var(--nn-space-2);
+    padding: var(--nn-space-2) var(--nn-space-3);
+    font-size: var(--nn-font-size-m);
+  }
+  .quiz-page #backButton {
+    min-height: 2rem;
+    margin-top: var(--nn-space-1);
+  }
+  .quiz-page .st1e,
+  .quiz-page .st2e {
+    display: inline;
+    font-size: var(--nn-font-size-s);
+  }
+  .quiz-page .buttons button {
+    min-height: 3rem;
+    font-size: var(--nn-font-size-l);
+  }
+}
+
+/* ---------- 狭い画面 ---------- */
+
+@media (max-width: 40rem) {
+  .container {
+    padding: var(--nn-space-4);
+  }
+  .codein button {
+    width: 100%;
+  }
+  .numberInputContainer button {
+    flex: 1;
+  }
+}

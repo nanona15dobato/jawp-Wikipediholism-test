@@ -1,49 +1,30 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-nn-site="github">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>オフライン - Wikipedia中毒テスト</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-
-        h1 {
-            color: #e74c3c;
-        }
-
-        p {
-            font-size: 1.2em;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 1em;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-    </style>
+    <link rel="icon" href="/favicon.ico">
+    <!-- nn:head -->
+    <link rel="stylesheet" href="./assets/quiz.css">
 </head>
 
 <body>
-    <h1>オフラインです</h1>
-    <p>インターネット接続がありません。<br>接続を確認して、再読み込みしてください。</p>
-    <p>または、データが正しく読み込めませんでした。</p>
-    <button onclick="window.location.reload()">再読み込み</button>
+    <a class="nn-skip-link" href="#content">本文へ移動</a>
+    <!-- nn:header -->
+    <main id="content" class="nn-page">
+        <h1 class="quiz-title">オフラインです</h1>
+        <div class="nn-message nn-message--warning">
+            <p>インターネットに接続されていないか、データを正しく読み込めませんでした。</p>
+            <p>接続を確認して、再読み込みしてください。</p>
+        </div>
+        <p><button id="reloadButton" type="button">再読み込み</button></p>
+    </main>
+    <!-- nn:footer -->
+    <script>
+        document.getElementById('reloadButton').addEventListener('click', function () { window.location.reload(); });
+    </script>
 </body>
 
 </html>
